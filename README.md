@@ -9,8 +9,6 @@ This npm package aims to increase the developer experience and consistancy by pr
     - [`check-branch`](#check-branch)
     - [`check-lock-files`](#check-lock-files)
 - [Other](#other)
-  - [Print output](#print-output)
-  - [Recipies](#recipies)
 - [Development](#development)
   - [Prerequsites](#prerequsites)
   - [Todo](#todo)
@@ -30,20 +28,25 @@ yarn husky install
 
 Once you have husky installed, let's proceed with setting up `@jeliasson/husky-hooks` and connect it with husky's `pre-commit` and `pre-push` hooks.
 
-```
+```bash
 # Install dependency @jeliasson/husky-hooks
 yarn add --dev @jeliasson/husky-hooks
 
 # Add package pre-commit hook
 npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
 
-# Add package pre-commit hook
+# Add package pre-push hook
 npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
 
-# Make a commit test
+# Create configuration file (husky-hooks.config.js)
+npx @jeliasson/husky-hooks generate-config
+
+# To test;
+# Make a new branch, create a test file, git add and commit
+git checkout -b testing/jeliasson-husky-hooks
 touch test.tmp
 git add test.tmp
-git commit -m "Keep calm and commit"
+git commit -m "test(repo): keep calm and commit"
 ```
 
 ## Hooks
@@ -102,27 +105,12 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
 
 ## Other
 
-### Print output
+**Print output**
 
-Sometimes you may want to the stdout of the hook ...
+Sometimes you may want to print the actual output of a hook, and passing `--stdout` will print the stdout of all hooks.
 
-```
+```bash
 npx @jeliasson/husky-hooks pre-commit --stdout
-```
-
-### Recipies
-
-**Test**
-**Make sure we don't push to protected branches**
-
-```
-npx husky add .husky/pre-push "npx @jeliasson/husky-hooks check-branch"
-```
-
-**Make sure we don't push to protected branches**
-
-```
-npx husky add .husky/pre-push "npx @jeliasson/husky-hooks check-branch"
 ```
 
 ## Development
@@ -160,12 +148,9 @@ yarn link husky-hooks
 - [ ] Use [zod](https://www.npmjs.com/package/zod) for configuration parsing
 - [ ] Add [cz-cli](https://github.com/commitizen/cz-cli) as 3rd party
 - [ ] Replace yargs with [clipanion](https://www.npmjs.com/package/clipanion)
+- [ ] Add `stdout` as optional to all settings
 - [ ] 🚀
 
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) ❤️
-
-```
-
-```
