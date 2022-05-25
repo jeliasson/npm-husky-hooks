@@ -1,6 +1,6 @@
 {
   "name": "@jeliasson/husky-hooks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "description": "Increase the developer experience and consistancy by providing a set of hooks that can be opted-in the development lifecycle.",
   "author": "jeliasson",
