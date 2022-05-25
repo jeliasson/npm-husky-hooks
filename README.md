@@ -1,6 +1,6 @@
 # `@jeliasson/husky-hooks`
 
-This npm package aims to increase the developer experience and consistancy by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
+This npm package aims to increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
 
 > :warning: **Note**: This package is in development so please move with caution.
 
@@ -38,8 +38,8 @@ npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
 # Add package pre-push hook
 npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
 
-# Create configuration file (husky-hooks.config.js)
-npx @jeliasson/husky-hooks generate-config
+# Copy config file
+cp node_modules/@jeliasson/husky-hooks/husky-hooks.config.default.js husky-hooks.config.js
 
 # To test;
 # Make a new branch, create a test file, git add and commit
@@ -142,6 +142,7 @@ yarn link husky-hooks
 
 - [ ] Move this to GitHub Issues
 - [x] Use this package in the development
+- [ ] Make sure config is created upon first command instead manually copying it in from node_modules
 - [ ] Make stable
 - [ ] Write tests
 - [ ] CI/CD for testing

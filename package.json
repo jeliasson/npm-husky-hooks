@@ -41,7 +41,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "husky-hooks.config.default.js"
   ],
   "bin": {
     "husky-hooks": "lib/bin.js"
