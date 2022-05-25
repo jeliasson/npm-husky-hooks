@@ -1,0 +1,64 @@
+{
+  "name": "@jeliasson/husky-hooks",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Increase the developer experience and consistancy by providing a set of hooks that can be opted-in the development lifecycle.",
+  "author": "jeliasson",
+  "homepage": "https://github.com/jeliasson/npm-husky-hooks",
+  "keywords": [
+    "husky",
+    "hooks"
+  ],
+  "bugs": {
+    "url": "https://github.com/jeliasson/npm-husky-hooks/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeliasson/npm-husky-hooks.git"
+  },
+  "dependencies": {
+    "husky": "^8.0.1",
+    "node-fetch": "^2.6.7",
+    "yargs": "^17.5.1",
+    "zod": "^3.17.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@types/node": "^17.0.35",
+    "@types/node-fetch": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import-helpers": "^1.2.1",
+    "jest": "^28.1.0",
+    "prettier": "2.6.2",
+    "ts-jest": "^28.0.2",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.6.4"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "bin": {
+    "husky-hooks": "lib/bin.js"
+  },
+  "scripts": {
+    "dev": "tsc-watch",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx --fix .",
+    "test": "jest --config jestconfig.json",
+    "preinstall": "echo \"Error: no preinstall specified\" && exit 0",
+    "install": "echo \"Error: no install specified\" && exit 0",
+    "postinstall": "echo \"Error: no postinstall specified\" && exit 0",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  }
+}
