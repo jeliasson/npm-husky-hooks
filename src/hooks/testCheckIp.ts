@@ -1,16 +1,16 @@
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'
 
-import { ThookResponse } from '../types';
+import { ThookResponse } from '../types'
 
 export async function testCheckIp(): Promise<ThookResponse> {
-  const stdout: string[] = [];
-  const errors: string[] = [];
+  const stdout: string[] = []
+  const errors: string[] = []
 
-  const response = await fetch('https://api64.ipify.org?format=json');
+  const response = await fetch('https://api64.ipify.org?format=json')
 
-  const res = await response.text();
+  const res = await response.text()
 
-  stdout.push(JSON.parse(res).ip);
+  stdout.push(JSON.parse(res).ip)
 
-  return { stdout, errors };
+  return { stdout, errors }
 }
