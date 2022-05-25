@@ -1,6 +1,6 @@
 import fs from 'fs'
-import { getConfig } from '../config'
 
+import { getConfig } from '../config'
 import { ThookResponse } from '../types'
 
 export async function checkLockFiles(): Promise<ThookResponse> {
