@@ -153,7 +153,7 @@ yarn link husky-hooks
 ### Todo
 
 - [ ] Move this to GitHub Issues
-- [ ] Use this package in the development
+- [x] Use this package in the development
 - [ ] Make stable
 - [ ] Write tests
 - [ ] CI/CD for testing
