@@ -124,7 +124,7 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ## Development
 
-### Prerequsites
+### Prerequisites
 
 - NodeJS >= 14
 - yarn
