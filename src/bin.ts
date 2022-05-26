@@ -15,7 +15,6 @@ async function init() {
   try {
     await getConfig()
   } catch (error) {
-    console.log(`\n❌❌❌\n`)
     console.log(error)
 
     process.exit(1)
