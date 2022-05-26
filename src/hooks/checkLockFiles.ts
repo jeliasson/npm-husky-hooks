@@ -40,7 +40,7 @@ export async function checkLockFiles(): Promise<THookResponse> {
   for (const file of denyLockFiles) {
     if (fs.existsSync(file)) {
       errors.push(
-        `Invalid occurence of "${file}" file. Please remove it and only use "${allowLockFile}"`
+        `Invalid occurence of "${file}" file. Remove it and only use "${allowLockFile}"`
       )
     }
   }

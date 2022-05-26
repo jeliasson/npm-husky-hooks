@@ -43,20 +43,44 @@ npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
 
 # Add package pre-push hook
 npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
+```
 
+Now to create a config file. `husky-hooks.config.js` will be placed in the root folder of the project.
+
+```bash
 # Create config
 npx @jeliasson/husky-hooks create-config
 ```
 
-Test the magic ✨
+Let's test it out and see if we get some magic ✨
 
 ```bash
 # Make a new branch, create a test file, git add and commit
 git checkout -b testing/jeliasson-husky-hooks
-touch test.tmp
-git add test.tmp
+touch test.tmp && git add test.tmp
 git commit -m "test(repo): keep calm and commit"
 ```
+
+This should yield the following output...
+
+```bash
+Running hook test-sleep... ✅
+Running hook check-branch... ✅
+Running hook check-lock-files... ✅
+```
+
+...unless you have anything other than `yarn.lock` in your repo 😅
+
+```bash
+Running hook test-sleep... ✅
+Running hook check-branch... ✅
+Running hook check-lock-files... ❌
+- Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
+```
+
+## Config
+
+...
 
 ## Hooks
 
