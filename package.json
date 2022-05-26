@@ -1,6 +1,6 @@
 {
   "name": "@jeliasson/husky-hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "description": "Increase the developer experience and consistancy by providing a set of hooks that can be opted-in the development lifecycle.",
   "author": "jeliasson",
@@ -50,16 +50,13 @@
   "scripts": {
     "dev": "tsc-watch",
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx --fix .",
     "test": "jest --config jestconfig.json",
     "preinstall": "echo \"Error: no preinstall specified\" && exit 0",
     "install": "echo \"Error: no install specified\" && exit 0",
     "postinstall": "echo \"Error: no postinstall specified\" && exit 0",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "prepublishOnly": "npm run lint"
   }
 }
