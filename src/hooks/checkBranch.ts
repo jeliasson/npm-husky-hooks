@@ -1,6 +1,7 @@
 import { execSync } from 'child_process'
 
 import { getConfig } from '../config'
+import { ThrowError } from '../error'
 import { ThookResponse } from '../types'
 
 export async function checkBranch(): Promise<ThookResponse> {
@@ -13,9 +14,9 @@ export async function checkBranch(): Promise<ThookResponse> {
   // Checks
   // @todo: Refactor to check package
   if (!settings?.protectedBranches)
-    throw new Error(
-      'Missing settings["check-branch"].protectedBranches in config.'
-    )
+    ThrowError([
+      'Missing settings["check-branch"].protectedBranches in config.',
+    ])
 
   //console.log(config)
   const protectedBranches = settings.protectedBranches

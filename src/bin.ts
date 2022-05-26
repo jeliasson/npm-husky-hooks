@@ -62,6 +62,7 @@ async function init() {
 
       if (response?.errors && response.errors.length > 0) {
         response.errors.map((error) => console.error(`- ${error}`))
+        console.log()
 
         process.exit(1)
       } else {

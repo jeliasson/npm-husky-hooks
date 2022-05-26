@@ -1,16 +1,17 @@
 import fs from 'fs'
 import path from 'path'
 
-function getConfigPath() {
-  return path.join(process.cwd(), 'husky-hooks.config.js')
+import { ThrowError } from './error'
 }
 
 function getDefaultConfigPath() {
   return path.join(__dirname, '../husky-hooks.config.default.js')
 }
 
-export async function getConfig() {
-  // read file husky-hooks.json from project root\
+    ThrowError([
+      `Config ${CONFIG_FILE} not found.`,
+      `Run 'npx @jeliasson/husky-hooks generate-settings' to create one.`,
+    ])
 
   //console.log(`Getting config...`)
   try {
@@ -44,7 +45,10 @@ async function createConfig() {
   //console.log(`orginalConfig`, orginalConfig)
   //console.log(`configPath`, configPath)
 
-  //console.log(`Creating config...`)
+    ThrowError([
+      `Could not find orginal ${ORGINAL_CONFIG_FILE}. That is a bit annoying 😕`,
+      `Please see orginal repository to grab the default config file.`,
+    ])
 
   try {
     await fs.copyFile(orginalConfig, configPath, () => {

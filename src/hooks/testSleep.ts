@@ -1,4 +1,5 @@
 import { getConfig } from '../config'
+import { ThrowError } from '../error'
 import { ThookResponse } from '../types'
 
 export async function testSleep(): Promise<ThookResponse> {
@@ -11,12 +12,12 @@ export async function testSleep(): Promise<ThookResponse> {
   // Checks
   // @todo: Refactor to check package
   if (!settings?.delay)
-    throw new Error(
-      'Missing settings["test-sleep"].delay as integer value in config.'
-    )
+    ThrowError([
+      'Missing settings["test-sleep"].delay as integer value in config.',
+    ])
 
   if (!Number.isInteger(settings.delay))
-    throw new Error('Rule settings["test-sleep"].delay is not a integer.')
+    ThrowError(['Setting settings["test-sleep"].delay is not a integer.'])
 
   await new Promise((resolve) => setTimeout(resolve, settings.delay))
 
