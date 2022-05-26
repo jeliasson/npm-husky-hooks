@@ -2,12 +2,12 @@
 
 This npm package aims to increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
 
-> :warning: **Note**: This package is in development so please move with caution.
+> :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
 
 - [Setup](#setup)
 - [Hooks](#hooks)
-    - [`check-branch`](#check-branch)
-    - [`check-lock-files`](#check-lock-files)
+  - [`check-branch`](#check-branch)
+  - [`check-lock-files`](#check-lock-files)
 - [Other](#other)
 - [Development](#development)
   - [Prerequsites](#prerequsites)
@@ -38,10 +38,13 @@ npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
 # Add package pre-push hook
 npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
 
-# Copy config file
-cp node_modules/@jeliasson/husky-hooks/husky-hooks.config.default.js husky-hooks.config.js
+# Create config
+npx @jeliasson/husky-hooks create-config
+```
 
-# To test;
+Test the magic ✨
+
+```bash
 # Make a new branch, create a test file, git add and commit
 git checkout -b testing/jeliasson-husky-hooks
 touch test.tmp
@@ -140,17 +143,24 @@ yarn link husky-hooks
 
 ### Todo
 
+**General**
+
 - [ ] Move this to GitHub Issues
 - [x] Use this package in the development
-- [ ] Make sure config is created upon first command instead manually copying it in from node_modules
-- [ ] Make stable
+- [x] ~~Make sure config is created upon first command instead manually copying it in from node_modules~~
+- [x] Create a `create-config` command
+- [ ] Refactor and make stable
 - [ ] Write tests
 - [ ] CI/CD for testing
 - [ ] Use [zod](https://www.npmjs.com/package/zod) for configuration parsing
-- [ ] Add [cz-cli](https://github.com/commitizen/cz-cli) as 3rd party
 - [ ] Replace yargs with [clipanion](https://www.npmjs.com/package/clipanion)
 - [ ] Add `stdout` as optional to all settings
-- [ ] 🚀
+- [ ] 1.0.0 🚀
+
+**Hooks**
+
+- [ ] Some kind of hook to make sure no sensitive environment variables is passed
+- [ ] Add [cz-cli](https://github.com/commitizen/cz-cli) as 3rd party
 
 ## Contributing
 

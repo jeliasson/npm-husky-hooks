@@ -1,9 +1,10 @@
 import fs from 'fs'
+
+import { ThrowError } from '../cli'
 import { getConfig } from '../config'
+import { THookResponse } from '../types'
 
-import { ThookResponse } from '../types'
-
-export async function checkLockFiles(): Promise<ThookResponse> {
+export async function checkLockFiles(): Promise<THookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
@@ -13,24 +14,24 @@ export async function checkLockFiles(): Promise<ThookResponse> {
   // Checks
   // @todo: Refactor to check package
   if (!settings?.allowLockFile)
-    throw new Error(
-      'Missing settings["check-lock-files"].allowLockFile in config.'
-    )
+    ThrowError([
+      'Missing settings["check-lock-files"].allowLockFile in config.',
+    ])
 
   if (typeof settings.allowLockFile !== 'string')
-    throw new Error(
-      'Rule settings["check-lock-files"].allowLockFile is not a string.'
-    )
+    ThrowError([
+      'Setting settings["check-lock-files"].allowLockFile is not a string.',
+    ])
 
   if (!settings?.denyLockFiles)
-    throw new Error(
-      'Missing settings["check-lock-files"].denyLockFiles in config.'
-    )
+    ThrowError([
+      'Missing settings["check-lock-files"].denyLockFiles in config.',
+    ])
 
   if (typeof settings.denyLockFiles !== 'object')
-    throw new Error(
-      'Rule settings["check-lock-files"].denyLockFiles is not a array.'
-    )
+    ThrowError([
+      'Setting settings["check-lock-files"].denyLockFiles is not a array.',
+    ])
 
   const allowLockFile = 'yarn.lock'
   const denyLockFiles = ['package-lock.json', 'pnpm-lock.yaml']

@@ -1,32 +1,47 @@
 import fs from 'fs'
 import path from 'path'
 
-function getConfigPath() {
-  return path.join(process.cwd(), 'husky-hooks.config.js')
+import { ThrowError, ThrowException } from './cli'
+import { TSettingByHook } from './types'
+
+const fsp = fs.promises
+
+export const PACKAGE_NAME = '@jeliasson/husky-hooks'
+export const CONFIG_FILE = 'husky-hooks.config.js'
+export const ORGINAL_CONFIG_FILE = 'husky-hooks.config.default.js'
+
+function getConfigPath(): string {
+  return path.join(process.cwd(), `${CONFIG_FILE}`)
 }
 
-function getDefaultConfigPath() {
-  return path.join(__dirname, '../husky-hooks.config.default.js')
+function getDefaultConfigPath(): string {
+  return path.join(__dirname, `../${ORGINAL_CONFIG_FILE}`)
 }
 
-export async function getConfig() {
-  // read file husky-hooks.json from project root\
+export async function configExists(): Promise<boolean> {
+  return await fs.existsSync(getConfigPath())
+}
 
-  //console.log(`Getting config...`)
+export async function orginalConfigExists(): Promise<boolean> {
+  return await fs.existsSync(getDefaultConfigPath())
+}
+
+export async function getConfig(): Promise<any> {
+  if (!(await configExists()))
+    ThrowError([
+      `Config ${CONFIG_FILE} not found.`,
+      `Run 'npx ${PACKAGE_NAME} create-config' to create one.`,
+    ])
+
   try {
     const configPath = getConfigPath()
     return require(configPath)
   } catch (error) {
-    // throw new Error('An error occurred while reading husky-hooks.json.')
-    return await createConfig()
+    return createConfig()
   }
 }
 
-type TRuleByHook = {
-  config: any
-  path: string
-}
-export async function getSettingsByHook(hook: string) {
+export async function getSettingsByHook(hook: string): Promise<TSettingByHook> {
   const config = await getConfig()
   const specific = config.settings[hook]
   const path = `config.settings[${hook}]`
@@ -37,20 +52,32 @@ export async function getSettingsByHook(hook: string) {
   }
 }
 
-async function createConfig() {
+/**
+ * Create a default config file
+ *
+ * @param   <boolean> force
+ * @returns <Promise<boolean>>
+ */
+export async function createConfig(force = false): Promise<any> {
   const orginalConfig = getDefaultConfigPath()
   const configPath = getConfigPath()
 
-  //console.log(`orginalConfig`, orginalConfig)
-  //console.log(`configPath`, configPath)
+  // Check if the config file already exists
+  if ((await configExists()) && !force)
+    ThrowError([
+      `Config ${CONFIG_FILE} already exists`,
+      `To override, run 'npx ${PACKAGE_NAME} create-config --force'`,
+    ])
 
-  //console.log(`Creating config...`)
+  // Check if the orginal config file exists
+  if (!(await orginalConfigExists()))
+    ThrowException([
+      `Could not find orginal ${ORGINAL_CONFIG_FILE}. Something is broken 😕`,
+      `Please see orginal repository to grab the default config file.`,
+    ])
 
   try {
-    await fs.copyFile(orginalConfig, configPath, () => {
-      console.log()
-      return require(configPath)
-    })
+    await fsp.copyFile(orginalConfig, configPath)
 
     return require(configPath)
   } catch (error) {
