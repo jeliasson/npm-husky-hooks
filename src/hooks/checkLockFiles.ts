@@ -1,10 +1,10 @@
 import fs from 'fs'
 
+import { ThrowError } from '../cli'
 import { getConfig } from '../config'
-import { ThrowError } from '../error'
-import { ThookResponse } from '../types'
+import { THookResponse } from '../types'
 
-export async function checkLockFiles(): Promise<ThookResponse> {
+export async function checkLockFiles(): Promise<THookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
