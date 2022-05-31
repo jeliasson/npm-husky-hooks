@@ -11,12 +11,13 @@ This npm package aims to increase the developer experience and consistency by pr
 > :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
 
 - [Setup](#setup)
+- [Config](#config)
 - [Hooks](#hooks)
-  - [`check-branch`](#check-branch)
-  - [`check-lock-files`](#check-lock-files)
+    - [`check-branch`](#check-branch)
+    - [`check-lock-files`](#check-lock-files)
 - [Other](#other)
 - [Development](#development)
-  - [Prerequsites](#prerequsites)
+  - [Prerequisites](#prerequisites)
   - [Todo](#todo)
 - [Contributing](#contributing)
 
@@ -80,7 +81,7 @@ Running hook check-lock-files... ❌
 
 ## Config
 
-...
+⚒️ Work in progress
 
 ## Hooks
 
