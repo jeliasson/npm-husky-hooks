@@ -1,16 +1,23 @@
 # `@jeliasson/husky-hooks`
 
+![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@jeliasson/husky-hooks)
+![GitHub issues](https://img.shields.io/github/issues/jeliasson/husky-hooks)
+![NPM](https://img.shields.io/npm/l/@jeliasson/husky-hooks)
+![npm](https://img.shields.io/npm/v/@jeliasson/husky-hooks)
+![npm bundle size](https://img.shields.io/bundlephobia/min/@jeliasson/husky-hooks)
+
 This npm package aims to increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
 
 > :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
 
 - [Setup](#setup)
+- [Config](#config)
 - [Hooks](#hooks)
-  - [`check-branch`](#check-branch)
-  - [`check-lock-files`](#check-lock-files)
+    - [`check-branch`](#check-branch)
+    - [`check-lock-files`](#check-lock-files)
 - [Other](#other)
 - [Development](#development)
-  - [Prerequsites](#prerequsites)
+  - [Prerequisites](#prerequisites)
   - [Todo](#todo)
 - [Contributing](#contributing)
 
@@ -37,20 +44,44 @@ npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
 
 # Add package pre-push hook
 npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
+```
 
+Now to create a config file. `husky-hooks.config.js` will be placed in the root folder of the project.
+
+```bash
 # Create config
 npx @jeliasson/husky-hooks create-config
 ```
 
-Test the magic ✨
+Let's test it out and see if we get some magic ✨
 
 ```bash
 # Make a new branch, create a test file, git add and commit
 git checkout -b testing/jeliasson-husky-hooks
-touch test.tmp
-git add test.tmp
+touch test.tmp && git add test.tmp
 git commit -m "test(repo): keep calm and commit"
 ```
+
+This should yield the following output...
+
+```bash
+Running hook test-sleep... ✅
+Running hook check-branch... ✅
+Running hook check-lock-files... ✅
+```
+
+...unless you have anything other than `yarn.lock` in your repo 😅
+
+```bash
+Running hook test-sleep... ✅
+Running hook check-branch... ✅
+Running hook check-lock-files... ❌
+- Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
+```
+
+## Config
+
+⚒️ Work in progress
 
 ## Hooks
 
@@ -118,7 +149,7 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ## Development
 
-### Prerequsites
+### Prerequisites
 
 - NodeJS >= 14
 - yarn
