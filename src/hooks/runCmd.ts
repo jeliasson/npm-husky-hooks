@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
 import { ThrowError, useHookResponse } from '../cli/response'
-import { HookResponse } from '../types'
+import { HookResponse } from '../hooks/index.types'
 
 export async function runCmd(command: string): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

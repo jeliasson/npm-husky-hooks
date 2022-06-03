@@ -1,6 +1,6 @@
-import { Hooks } from '../types'
 import { checkBranch } from './checkBranch'
 import { checkLockFiles } from './checkLockFiles'
+import { Hooks } from './index.types'
 import { runCmd } from './runCmd'
 import { testCheckIp } from './testCheckIp'
 import { testSleep } from './testSleep'
@@ -12,5 +12,4 @@ export const hooks = <Hooks>{
   'check-lock-files': checkLockFiles,
   'test-sleep': testSleep,
   'test-check-ip': testCheckIp,
-  'run-cmd': runCmd,
 }

@@ -1,6 +1,6 @@
 import { ThrowError, useHookResponse } from '../cli/response'
 import { getConfig } from '../config'
-import { HookResponse } from '../types'
+import { HookResponse } from '../hooks/index.types'
 
 export async function testSleep(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

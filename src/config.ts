@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { ThrowError, ThrowException } from './cli/response'
-import { SettingByHook } from './types'
+import { SettingByHook } from './hooks/index.types'
 
 const fsp = fs.promises
 

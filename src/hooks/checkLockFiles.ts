@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { ThrowError, useHookResponse } from '../cli/response'
 import { getConfig } from '../config'
-import { HookResponse } from '../types'
+import { HookResponse } from '../hooks/index.types'
 
 export async function checkLockFiles(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

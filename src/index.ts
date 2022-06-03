@@ -1,5 +1,5 @@
 import { hooks } from './hooks'
-import { HookResponse } from './types'
+import { HookResponse } from './hooks/index.types'
 
 /**
  *

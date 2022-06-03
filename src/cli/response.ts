@@ -1,10 +1,12 @@
-import { CommandResponse, HookResponse } from '../types'
+import { CommandResponse } from '../commands/index.types'
+import { HookResponse } from '../hooks/index.types'
 
 /**
  * Throw success
  *
- * @param   <string[]>  messages
- * @returns <Error>
+ * @param   <string[]>  messages    Array of error messages
+ * @returns <unkown>                Console.log formatted error messages
+ *                                  with Process.exit(0)
  */
 export function ThrowSuccess(messages: string[]): Error {
   const formated = messages.map((message) => `${message}`).join('\n')
@@ -17,8 +19,9 @@ export function ThrowSuccess(messages: string[]): Error {
 /**
  * Throw errors
  *
- * @param   <string[]>  messages
- * @returns <Error>
+ * @param   <string[]>  messages    Array of error messages
+ * @returns <Error>                 Console.log formatted error messages
+ *                                  with Process.exit(1)
  */
 export function ThrowError(messages: string[]): Error {
   const formated = messages.map((message) => `${message}`).join('\n')
@@ -31,8 +34,8 @@ export function ThrowError(messages: string[]): Error {
 /**
  * Throw exceptions
  *
- * @param   <string[]>  messages
- * @returns <Error>
+ * @param   <string[]>  messages    Array of error messages
+ * @returns <Error>                 New error with formatted messages
  */
 export function ThrowException(messages: string[]): Error {
   const formated = messages.map((message) => `${message}`).join('\n')

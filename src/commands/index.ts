@@ -1,5 +1,5 @@
-import { Commands } from '../types'
 import { createConfigCommand } from './createConfig'
+import { Commands } from './index.types'
 
 export const events = ['pre-commit', 'pre-push']
 

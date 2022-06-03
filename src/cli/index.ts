@@ -3,7 +3,11 @@ import yargs from 'yargs/yargs'
 
 import { CLIParserResponse } from './index.types'
 
-// @todo: Type and jsdoc
+/**
+ * CLI parser
+ *
+ * @returns {CLIParserResponse}
+ */
 export async function CLIParser(): Promise<CLIParserResponse> {
   const _argv = await yargs(hideBin(process.argv)).argv
 
