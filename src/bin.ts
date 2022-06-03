@@ -1,67 +1,55 @@
 #!/usr/bin/env node
 
-import { CLIParser } from './cli'
-import { commands } from './commands'
-import { getConfig, PACKAGE_NAME } from './config'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
+
+import { getConfig } from './config'
 import { runHook } from './index'
 
 async function init() {
-  // CLI
-  const { _argv, args } = await CLIParser()
+  // Event
+  const argv = await yargs(hideBin(process.argv)).argv
+  const args = argv._
 
-  // @todo Make this prettier and refactor to a help section
-  // that generates a list of commands, including running hooks
-  const command = args[0]
-  if (!command) {
-    console.log(``)
-    console.log(`❌ Missing command argument, e.g. pre-commit.`)
-    console.log(``)
-    console.log(`> npx ${PACKAGE_NAME} pre-commit`)
-
-    process.exit(1)
-  }
-
-  //
-  // Commands
-  //
-  const commandFn = commands[command]
-  if (typeof commandFn === 'function') {
-    await commandFn()
-
-    // Exit out from here
-    process.exit(0)
-  }
-
-  //
-  // Config
-  //
+  // Check if we have a valid config before running any hooks
   try {
-    // Check if we have a valid config before running any hooks
     await getConfig()
   } catch (error) {
     console.log(error)
 
-    // Exit out from here
     process.exit(1)
   }
 
-  //
-  // Hooks
-  //
+  // @todo Make this prettier
+  const event = args[0]
+  if (!event) {
+    console.log(``)
+    console.log(`❌ Missing event argument, e.g. pre-commit.`)
+    console.log(``)
+    console.log(`> npx @jeliasson/husky-hooks pre-commit`)
+
+    process.exit(1)
+  }
+
+  // @todo: Check config.hooks
   const config = await getConfig()
-  if (!config?.hooks[command]) {
+  if (!config?.hooks[event]) {
+    //const events: string[] = []
+    const events = Object.keys(config.hooks).map(function (key) {
+      return key
+    })
     console.log(``)
-    console.log(`❌ Unknown command ${command}.`)
+    console.log(`❌ Unknown event ${event}.`)
     console.log(``)
-    Object.keys(config.hooks).map(function (command) {
-      console.log(`> npx ${PACKAGE_NAME} ${command}`)
+    Object.keys(config.hooks).map(function (event) {
+      console.log(`> npx @jeliasson/husky-hooks ${event}`)
     })
 
     process.exit(1)
   }
 
   // Make a list of hooks to run
-  const hooks = config.hooks[command]
+  const hooks = config.hooks[event]
 
   for (const hook of hooks) {
     try {
@@ -78,7 +66,7 @@ async function init() {
         process.exit(1)
       } else {
         // if option --stdout is set, print stdout
-        if (response?.stdout && _argv.stdout) {
+        if (response?.stdout && argv.stdout) {
           response.stdout.map((line) => console.log(`- ${line}`))
         }
         //console.log(response)

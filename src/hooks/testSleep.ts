@@ -1,8 +1,8 @@
-import { ThrowError } from '../cli'
 import { getConfig } from '../config'
-import { THookResponse } from '../types'
+import { ThrowError } from '../error'
+import { ThookResponse } from '../types'
 
-export async function testSleep(): Promise<THookResponse> {
+export async function testSleep(): Promise<ThookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 

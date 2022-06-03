@@ -3,7 +3,7 @@ export type CommandReturn = {
 }
 
 export type THooks = {
-  [key: string]: () => Promise<THookResponse>
+  [key: string]: () => Promise<ThookResponse>
 }
 
 export type TSettingByHook = {
@@ -11,16 +11,7 @@ export type TSettingByHook = {
   path: string
 }
 
-export type THookResponse = {
-  stdout: string[]
-  errors: string[]
-}
-
-export type TCommands = {
-  [key: string]: () => Promise<TCommandResponse>
-}
-
-export type TCommandResponse = {
+export type ThookResponse = {
   stdout: string[]
   errors: string[]
 }

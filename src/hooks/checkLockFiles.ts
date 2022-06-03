@@ -1,10 +1,10 @@
 import fs from 'fs'
 
-import { ThrowError } from '../cli'
 import { getConfig } from '../config'
-import { THookResponse } from '../types'
+import { ThrowError } from '../error'
+import { ThookResponse } from '../types'
 
-export async function checkLockFiles(): Promise<THookResponse> {
+export async function checkLockFiles(): Promise<ThookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
@@ -40,7 +40,7 @@ export async function checkLockFiles(): Promise<THookResponse> {
   for (const file of denyLockFiles) {
     if (fs.existsSync(file)) {
       errors.push(
-        `Invalid occurence of "${file}" file. Remove it and only use "${allowLockFile}"`
+        `Invalid occurence of "${file}" file. Please remove it and only use "${allowLockFile}"`
       )
     }
   }

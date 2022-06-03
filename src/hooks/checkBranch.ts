@@ -1,10 +1,10 @@
 import { execSync } from 'child_process'
 
-import { ThrowError } from '../cli'
 import { getConfig } from '../config'
-import { THookResponse } from '../types'
+import { ThrowError } from '../error'
+import { ThookResponse } from '../types'
 
-export async function checkBranch(): Promise<THookResponse> {
+export async function checkBranch(): Promise<ThookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
