@@ -17,12 +17,16 @@ export async function runCmd(command: string): Promise<HookResponse> {
     ])
 
   try {
-    const output = execSync(command, {
+    // Exec command
+    const exec = execSync(command, {
       stdio: ['ignore'],
     })
-      .toString('utf8')
-      .replace(/[\n\r\s]+$/, '')
 
+    // Format output
+    // @todo: Refactor this to exec package
+    const output = exec.toString('utf8').replace(/[\n\r\s]+$/, '')
+
+    // Push to stdout
     stdout.push(output)
   } catch (error) {
     //const errorMessage = error.message.replace(/[\n\r\s]+$/, '')

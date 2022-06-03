@@ -6,8 +6,3 @@ export type HookResponse = {
   stdout: string[]
   errors: string[]
 }
-
-export type SettingByHook = {
-  config: any
-  path: string
-}
