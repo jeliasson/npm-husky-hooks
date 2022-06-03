@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 
-import { THookResponse } from '../types'
+import { HookResponse } from '../types'
 
-export async function testCheckIp(): Promise<THookResponse> {
+export async function testCheckIp(): Promise<HookResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
