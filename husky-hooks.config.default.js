@@ -2,14 +2,12 @@ const config = {
   hooks: {
     'pre-commit': [
       'test-sleep', // This is a dummy hook for demo purposes
-      'test-check-ip', // This is a dummy hook for demo purposes
       'check-branch',
       'check-lock-files',
     ],
 
     'pre-push': [
       'test-sleep', // This is a dummy hook for demo purposes
-      'test-check-ip', // This is a dummy hook for demo purposes
       'check-branch',
       'check-lock-files',
     ],
