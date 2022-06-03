@@ -1,4 +1,4 @@
-import { ThrowError, useHookResponse } from '../cli'
+import { ThrowError, useHookResponse } from '../cli/response'
 import { getConfig } from '../config'
 import { HookResponse } from '../types'
 

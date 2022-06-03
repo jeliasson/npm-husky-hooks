@@ -1,4 +1,5 @@
-import { CLIParser, ThrowSuccess, useCommandResponse } from '../cli'
+import { CLIParser } from '../cli'
+import { ThrowSuccess, useCommandResponse } from '../cli/response'
 import { CONFIG_FILE, createConfig } from '../config'
 import { CommandResponse } from '../types'
 
