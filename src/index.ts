@@ -1,7 +1,8 @@
 import { hooks } from './hooks'
-import { HookResponse } from './types'
+import { HookResponse } from './hooks/index.types'
 
 /**
+ * Execute hook
  *
  * @param   {string} name               Name of hook to run
  * @returns {Promise<HookResponse>}

@@ -1,11 +1,10 @@
-import { CLIParser, ThrowSuccess } from '../cli'
+import { CLIParser } from '../cli'
+import { ThrowSuccess, useCommandResponse } from '../cli/response'
+import { CommandResponse } from '../commands/index.types'
 import { CONFIG_FILE, createConfig } from '../config'
-import { CommandResponse } from '../types'
 
-// @todo Fix better typing
 export async function createConfigCommand(): Promise<CommandResponse> {
-  const stdout: string[] = []
-  const errors: string[] = []
+  const { stdout, errors } = useCommandResponse()
 
   const cli = await CLIParser()
   const force = cli.opts.force

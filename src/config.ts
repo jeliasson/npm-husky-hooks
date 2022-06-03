@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ThrowError, ThrowException } from './cli'
-import { SettingByHook } from './types'
+import { ThrowError, ThrowException } from './cli/response'
+import { SettingByName, SettingsByName } from './types'
 
 const fsp = fs.promises
 
@@ -41,13 +41,27 @@ export async function getConfig(): Promise<any> {
   }
 }
 
-export async function getSettingsByHook(hook: string): Promise<SettingByHook> {
+export async function getSettingsByName(name: string): Promise<SettingsByName> {
   const config = await getConfig()
-  const specific = config.settings[hook]
-  const path = `config.settings[${hook}]`
+  const settings = config.settings[name]
+  const path = `config.settings['${name}']`
 
   return {
-    config: specific,
+    settings,
+    path,
+  }
+}
+
+export async function getConfigSettingByName(
+  name: string,
+  setting: string
+): Promise<SettingByName> {
+  const config = await getConfig()
+  const value = config.settings[name][setting]
+  const path = `config.settings['${name}']['${setting}']`
+
+  return {
+    value,
     path,
   }
 }
