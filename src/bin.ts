@@ -14,9 +14,9 @@ async function init() {
   // that generates a list of commands, including running hooks
   const command = args[0]
   if (!command) {
-    console.log(``)
+    console.log()
     console.log(`❌ Missing command argument, e.g. pre-commit.`)
-    console.log(``)
+    console.log()
     console.log(`> npx ${PACKAGE_NAME} pre-commit`)
 
     process.exit(1)
@@ -51,9 +51,9 @@ async function init() {
   //
   const config = await getConfig()
   if (!config?.hooks[command]) {
-    console.log(``)
+    console.log()
     console.log(`❌ Unknown command ${command}.`)
-    console.log(``)
+    console.log()
     Object.keys(config.hooks).map(function (command) {
       console.log(`> npx ${PACKAGE_NAME} ${command}`)
     })

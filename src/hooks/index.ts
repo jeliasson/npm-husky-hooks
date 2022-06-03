@@ -10,6 +10,7 @@ export const events = ['pre-commit', 'pre-push']
 export const hooks = <Hooks>{
   'check-branch': checkBranch,
   'check-lock-files': checkLockFiles,
+  'run-cmd': runCmd,
   'test-sleep': testSleep,
   'test-check-ip': testCheckIp,
 }
