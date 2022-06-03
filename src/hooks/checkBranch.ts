@@ -10,7 +10,7 @@ export async function checkBranch(): Promise<HookResponse> {
   // Protected branch setting
   const protectedBranchesSetting = await getConfigSettingByName(
     'check-branch',
-    'protectedBranchesSetting'
+    'protectedBranches'
   )
 
   // Checks
