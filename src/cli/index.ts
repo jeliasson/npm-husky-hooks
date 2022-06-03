@@ -46,7 +46,7 @@ export function ThrowSuccess(messages: string[]): Error {
 export function ThrowError(messages: string[]): Error {
   const formated = messages.map((message) => `${message}`).join('\n')
 
-  console.log(`\n❌ Error\n\n${formated}`)
+  console.log(`❌\n\n❌ Error\n\n${formated}`)
 
   process.exit(1)
 }

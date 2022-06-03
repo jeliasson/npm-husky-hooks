@@ -1,9 +1,9 @@
 import { CLIParser, ThrowSuccess } from '../cli'
 import { CONFIG_FILE, createConfig } from '../config'
-import { TCommandResponse } from '../types'
+import { CommandResponse } from '../types'
 
 // @todo Fix better typing
-export async function createConfigCommand(): Promise<TCommandResponse> {
+export async function createConfigCommand(): Promise<CommandResponse> {
   const stdout: string[] = []
   const errors: string[] = []
 
