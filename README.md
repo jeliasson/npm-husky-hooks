@@ -15,6 +15,7 @@ This npm package aims to increase the developer experience and consistency by pr
 - [Hooks](#hooks)
     - [`check-branch`](#check-branch)
     - [`check-lock-files`](#check-lock-files)
+    - [`run-cmd`](#run-cmd)
 - [Other](#other)
 - [Development](#development)
   - [Prerequisites](#prerequisites)
@@ -68,6 +69,7 @@ This should yield the following output...
 Running hook test-sleep... ✅
 Running hook check-branch... ✅
 Running hook check-lock-files... ✅
+Running hook run with argument 'echo Test'... ✅
 ```
 
 ...unless you have anything other than `yarn.lock` in your repo 😅
@@ -76,7 +78,9 @@ Running hook check-lock-files... ✅
 Running hook test-sleep... ✅
 Running hook check-branch... ✅
 Running hook check-lock-files... ❌
-- Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
+Running hook run with argument 'echo Test'... ✅
+
+Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
 ```
 
 ## Config
@@ -91,6 +95,7 @@ Hooks to run is defined in the configuration file `husky-hooks.config.js` that w
 | --------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | [`check-branch`](#check-branch)         | Check which git branch we're currently on, and abort if it's a protected branch.                 |
 | [`check-lock-files`](#check-lock-files) | Check for package manager lock files, and abort if any are present lock file that we don't want. |
+| [`run-cmd`](#run-cmd)                   | Run a ad-hoc command, and abort if the commands fails.                                           |
 
 #### `check-branch`
 
@@ -100,7 +105,23 @@ Check which git branch we're currently on, and abort if it's a protected branch.
 
 Add `check-branch` hook to `pre-commit` and/or `pre-push`.
 
-**Config**
+```js
+{
+  hooks: {
+    'pre-commit': [
+      'check-branch', /* This line */
+      ...
+    ],
+
+    'pre-push': [
+      'check-branch', /* This line */
+      ...
+    ],
+  },
+}
+```
+
+**Settings**
 
 ```js
 {
@@ -121,7 +142,23 @@ Check for package manager lock files, and abort if any are present lock file tha
 
 Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
 
-**Config**
+```js
+{
+  hooks: {
+    'pre-commit': [
+      'check-lock-files', /* This line */
+      ...
+    ],
+
+    'pre-push': [
+      'check-lock-files', /* This line */
+      ...
+    ],
+  },
+}
+```
+
+**Settings**
 
 ```js
 {
@@ -134,6 +171,34 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
       denyLockFiles: ['package-lock.json', 'pnpm-lock.yaml'],
     },
   }
+}
+```
+
+#### `run-cmd`
+
+Run a ad-hoc command, for example `yarn lint`, and abort if the commands fails. This can be useful if you have other commands, for exmaple in your husky hooks, that you want to run as part of this package.
+
+> :warning: **Note**: Still figuring out the best approach to capture stdout/stderr and present them where appropriate. It works fine for now.
+
+**Setup**
+
+Add `run-cmd` hooks to `pre-commit` and/or `pre-push`. It should be shaped as an array where the first argument is `run-cmd` and the second argument would be the command to run, e.g. `yarn lint`. In below example we have two ad-hoc commands for each hook.
+
+```js
+{
+  hooks: {
+    'pre-commit': [
+      ['run-cmd', 'echo This is a pre-commit hook via run-cmd'],
+      ['run-cmd', 'yarn lint'],
+      ...
+    ],
+
+    'pre-push': [
+      ['run-cmd', 'echo This is a pre-push hook via run-cmd'],
+      ['run-cmd', 'yarn lint'],
+      ...
+    ],
+  },
 }
 ```
 
@@ -169,7 +234,7 @@ yarn dev
 From the test project directory, run
 
 ```bash
-yarn link husky-hooks
+yarn link @jeliasson/husky-hooks
 ```
 
 ### Todo
@@ -180,6 +245,7 @@ yarn link husky-hooks
 - [x] Use this package in the development
 - [x] ~~Make sure config is created upon first command instead manually copying it in from node_modules~~
 - [x] Create a `create-config` command
+- [x] Be able to run ad-hoc commands
 - [ ] Refactor and make stable
 - [ ] Write tests
 - [ ] CI/CD for testing

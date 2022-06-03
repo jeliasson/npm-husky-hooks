@@ -1,17 +1,13 @@
-export type CommandReturn = {
-  errors: string[]
+export type Config = {
+  test: string
 }
 
-export type THooks = {
-  [key: string]: () => Promise<ThookResponse>
-}
-
-export type TSettingByHook = {
-  config: any
+export type SettingsByName = {
+  settings: any
   path: string
 }
 
-export type ThookResponse = {
-  stdout: string[]
-  errors: string[]
+export type SettingByName = {
+  value: boolean | number | string | object
+  path: string
 }

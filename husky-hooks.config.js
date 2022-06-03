@@ -1,19 +1,17 @@
-/** @type {import('@jeliasson/husky-hooks').Config} */
-
 const config = {
   hooks: {
     'pre-commit': [
-      'test-sleep', // This is a dummy hook for demo purposes
+      ['run-cmd', 'yarn lint'],
+      ['run-cmd', 'yarn format'],
       'check-branch',
       'check-lock-files',
-      ['run-cmd', 'echo Test'],
     ],
 
     'pre-push': [
-      'test-sleep', // This is a dummy hook for demo purposes
+      ['run-cmd', 'tsc'],
+      ['run-cmd', 'yarn lint'],
       'check-branch',
       'check-lock-files',
-      ['run-cmd', 'echo Test'],
     ],
   },
 

@@ -1,37 +1,35 @@
 import fs from 'fs'
 
-import { getConfig } from '../config'
-import { ThrowError } from '../error'
-import { ThookResponse } from '../types'
+import { ThrowError, useHookResponse } from '../cli/response'
+import { getConfigSettingByName } from '../config'
+import { HookResponse } from '../hooks/index.types'
 
-export async function checkLockFiles(): Promise<ThookResponse> {
-  const stdout: string[] = []
-  const errors: string[] = []
+export async function checkLockFiles(): Promise<HookResponse> {
+  const { stdout, errors } = useHookResponse()
 
-  const config = await getConfig()
-  const settings = config?.settings['check-lock-files']
+  const allowLockFileSetting = await getConfigSettingByName(
+    'check-lock-files',
+    'allowLockFile'
+  )
+
+  const denyLockFilesSetting = await getConfigSettingByName(
+    'check-lock-files',
+    'denyLockFiles'
+  )
 
   // Checks
   // @todo: Refactor to check package
-  if (!settings?.allowLockFile)
-    ThrowError([
-      'Missing settings["check-lock-files"].allowLockFile in config.',
-    ])
+  if (!allowLockFileSetting.value)
+    ThrowError([`Missing ${allowLockFileSetting.path} in config.`])
 
-  if (typeof settings.allowLockFile !== 'string')
-    ThrowError([
-      'Setting settings["check-lock-files"].allowLockFile is not a string.',
-    ])
+  if (typeof allowLockFileSetting.value !== 'string')
+    ThrowError([`Setting ${allowLockFileSetting.path} is not a string.`])
 
-  if (!settings?.denyLockFiles)
-    ThrowError([
-      'Missing settings["check-lock-files"].denyLockFiles in config.',
-    ])
+  if (!denyLockFilesSetting.value)
+    ThrowError([`Missing ${denyLockFilesSetting.path} in config.`])
 
-  if (typeof settings.denyLockFiles !== 'object')
-    ThrowError([
-      'Setting settings["check-lock-files"].denyLockFiles is not a array.',
-    ])
+  if (typeof denyLockFilesSetting.value !== 'object')
+    ThrowError([`Setting ${denyLockFilesSetting.path} is not a array.`])
 
   const allowLockFile = 'yarn.lock'
   const denyLockFiles = ['package-lock.json', 'pnpm-lock.yaml']

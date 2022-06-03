@@ -1,33 +1,38 @@
 import { execSync } from 'child_process'
 
-import { getConfig } from '../config'
-import { ThrowError } from '../error'
-import { ThookResponse } from '../types'
+import { ThrowError, useHookResponse } from '../cli/response'
+import { getConfigSettingByName } from '../config'
+import { HookResponse } from '../hooks/index.types'
 
-export async function checkBranch(): Promise<ThookResponse> {
-  const stdout: string[] = []
-  const errors: string[] = []
+export async function checkBranch(): Promise<HookResponse> {
+  const { stdout, errors } = useHookResponse()
 
-  const config = await getConfig()
-  const settings = config?.settings['check-branch']
+  // Protected branch setting
+  const protectedBranchesSetting = await getConfigSettingByName(
+    'check-branch',
+    'protectedBranches'
+  )
 
   // Checks
-  // @todo: Refactor to check package
-  if (!settings?.protectedBranches)
-    ThrowError([
-      'Missing settings["check-branch"].protectedBranches in config.',
-    ])
+  if (!protectedBranchesSetting.value)
+    ThrowError([`Missing ${protectedBranchesSetting.path} in config.`])
 
-  //console.log(config)
-  const protectedBranches = settings.protectedBranches
+  if (typeof protectedBranchesSetting.value !== 'object')
+    ThrowError([`Config ${protectedBranchesSetting.path} must be an array.`])
 
-  const branch = execSync(`git branch --show-current`, {
+  // Exec command
+  const exec = execSync(`git branch --show-current`, {
     stdio: ['pipe', 'pipe', 'ignore'],
   })
-    .toString('utf8')
-    .replace(/[\n\r\s]+$/, '')
 
-  if (typeof branch === 'string' && protectedBranches.includes(branch)) {
+  // Format output
+  // @todo: Refactor this to exec package
+  const branch = exec.toString('utf8').replace(/[\n\r\s]+$/, '')
+
+  if (
+    Array.isArray(protectedBranchesSetting.value) &&
+    protectedBranchesSetting.value.includes(branch)
+  ) {
     errors.push(`Branch "${branch}" is protected.`)
   }
 
