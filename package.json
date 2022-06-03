@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "husky": "^8.0.1",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^3.0.0",
     "yargs": "^17.5.1",
     "zod": "^3.17.3"
   },
