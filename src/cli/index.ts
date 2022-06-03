@@ -1,6 +1,8 @@
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+import { CommandResponse, HookResponse } from '../types'
+
 // @todo: Type and jsdoc
 export async function CLIParser() {
   const _argv = await yargs(hideBin(process.argv)).argv
@@ -61,4 +63,34 @@ export function ThrowException(messages: string[]): Error {
   const formated = messages.map((message) => `${message}`).join('\n')
 
   throw new Error(`\n\n💀 Exception\n\n${formated}\n\n🐛 Stack trace\n`)
+}
+
+/**
+ * Construct command response
+ *
+ * @returns <CommandResponse>
+ */
+export function useCommandResponse(): CommandResponse {
+  const stdout: string[] = []
+  const errors: string[] = []
+
+  return {
+    stdout,
+    errors,
+  }
+}
+
+/**
+ * Construct hook response
+ *
+ * @returns <HookResponse>
+ */
+export function useHookResponse(): HookResponse {
+  const stdout: string[] = []
+  const errors: string[] = []
+
+  return {
+    stdout,
+    errors,
+  }
 }

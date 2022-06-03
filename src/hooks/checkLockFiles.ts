@@ -1,12 +1,11 @@
 import fs from 'fs'
 
-import { ThrowError } from '../cli'
+import { ThrowError, useHookResponse } from '../cli'
 import { getConfig } from '../config'
 import { HookResponse } from '../types'
 
 export async function checkLockFiles(): Promise<HookResponse> {
-  const stdout: string[] = []
-  const errors: string[] = []
+  const { stdout, errors } = useHookResponse()
 
   const config = await getConfig()
   const settings = config?.settings['check-lock-files']

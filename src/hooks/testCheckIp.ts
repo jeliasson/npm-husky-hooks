@@ -1,10 +1,10 @@
 import fetch from 'node-fetch'
 
+import { useHookResponse } from '../cli'
 import { HookResponse } from '../types'
 
 export async function testCheckIp(): Promise<HookResponse> {
-  const stdout: string[] = []
-  const errors: string[] = []
+  const { stdout, errors } = useHookResponse()
 
   const response = await fetch('https://api64.ipify.org?format=json')
 
