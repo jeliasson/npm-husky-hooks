@@ -18,7 +18,6 @@ export async function checkLockFiles(): Promise<HookResponse> {
   )
 
   // Checks
-  // @todo: Refactor to check package
   if (!allowLockFileSetting.value)
     ThrowError([`Missing ${allowLockFileSetting.path} in config.`])
 
