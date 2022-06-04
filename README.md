@@ -11,7 +11,6 @@ This npm package aims to increase the developer experience and consistency by pr
 > :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
 
 - [Setup](#setup)
-- [Config](#config)
 - [Hooks](#hooks)
     - [`check-branch`](#check-branch)
     - [`check-lock-files`](#check-lock-files)
@@ -78,14 +77,9 @@ Running hook run with argument 'echo Test'... ✅
 Running hook test-sleep... ✅
 Running hook check-branch... ✅
 Running hook check-lock-files... ❌
-Running hook run with argument 'echo Test'... ✅
 
 Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
 ```
-
-## Config
-
-⚒️ Work in progress
 
 ## Hooks
 

@@ -1,0 +1,64 @@
+name: "🧪 dev"
+
+on:
+  push:
+    branches:
+      - dev
+
+    paths:
+      - ".github/workflows/dev.yml"
+      - "src/**"
+      - "husky-hooks.config.default.js"
+      - "package.json"
+      - "tsconfig.json"
+      - "yarn.lock"
+
+env:
+  NODE_ENV: "development"
+  RUNTIME_ENV: "main"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install depencencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      # This will probabaly fail, as dev is in the branch. Maybe we should delete it first,
+      # then create a new config, empty the protectedBranches, and then test. 🤔
+      - name: Test
+        run: |
+
+          # Remove current config
+          rm husky-hooks.config.js
+
+          # Test create-config
+          npx @jeliasson/husky-hooks create-config
+
+          # Test create-config with --force
+          npx @jeliasson/husky-hooks create-config --force
+
+          # Update protectedBranches to be []
+          cp husky-hooks.config.js husky-hooks.config.js.bak && \
+          cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
+
+          # Display config
+          cat husky-hooks.config.js
+
+          # Test hooks
+          npx @jeliasson/husky-hooks pre-commit
+          npx @jeliasson/husky-hooks pre-push
