@@ -6,7 +6,7 @@ on:
       - issue/**
 
     paths:
-      - ".github/workflows/issue.yaml"
+      - ".github/workflows/issue.yml"
       - "src/**"
       - "husky-hooks.config.default.js"
       - "package.json"

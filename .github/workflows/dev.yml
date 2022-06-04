@@ -6,7 +6,7 @@ on:
       - dev
 
     paths:
-      - ".github/workflows/dev.yaml"
+      - ".github/workflows/dev.yml"
       - "src/**"
       - "husky-hooks.config.default.js"
       - "package.json"
