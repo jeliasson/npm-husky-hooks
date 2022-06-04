@@ -43,11 +43,8 @@ jobs:
       - name: Test
         run: |
 
-          # Remove current config
-          rm husky-hooks.config.js
-
           # Create config
-          npx @jeliasson/husky-hooks create-config
+          npx @jeliasson/husky-hooks create-config --force
 
           # Update protectedBranches
           cp husky-hooks.config.js husky-hooks.config.js.bak && \
