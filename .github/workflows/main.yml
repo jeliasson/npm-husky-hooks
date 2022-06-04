@@ -1,0 +1,39 @@
+name: "🚀 main"
+
+on:
+  push:
+    branches:
+      - main
+
+    paths:
+      - ".github/workflows/main.yaml"
+      - "src/**"
+      - "husky-hooks.config.default.js"
+      - "package.json"
+      - "tsconfig.json"
+      - "yarn.lock"
+
+env:
+  NODE_ENV: "development"
+  RUNTIME_ENV: "main"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install depencencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build

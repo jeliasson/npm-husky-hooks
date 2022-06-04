@@ -1,0 +1,31 @@
+name: "📦 publish"
+
+on: push
+
+env:
+  NODE_ENV: "development"
+  RUNTIME_ENV: "main"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install depencencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Publish package
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
