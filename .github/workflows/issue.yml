@@ -45,10 +45,10 @@ jobs:
           rm husky-hooks.config.js
 
           # Test create-config
-          npx @jeliasson/husky-hooks pre-commit
+          npx @jeliasson/husky-hooks create-config
 
           # Test create-config with --force
-          npx @jeliasson/husky-hooks pre-commit --force
+          npx @jeliasson/husky-hooks create-config --force
 
           # Update protectedBranches to be []
           cp husky-hooks.config.js husky-hooks.config.js.bak && \
