@@ -8,7 +8,7 @@ import { runHook } from './index'
 
 async function init() {
   // CLI
-  const { _argv, args } = await CLIParser()
+  const { args, opts } = await CLIParser()
 
   // @todo Make this prettier and refactor to a help section
   // that generates a list of commands, including running hooks
@@ -108,7 +108,7 @@ async function init() {
         process.exit(1)
       } else {
         const stdout = response?.stdout ? response.stdout : null
-        if (stdout && _argv.stdout) {
+        if (stdout && opts.stdout) {
           // Print stdout if --stdout was passed
           if (stdout.length > 0) console.log()
           stdout.map((line: string) => console.log(`${line}`))

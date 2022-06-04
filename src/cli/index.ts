@@ -1,5 +1,4 @@
-import { hideBin } from 'yargs/helpers'
-import yargs from 'yargs/yargs'
+import { program } from 'commander'
 
 import { CLIParserResponse } from './index.types'
 
@@ -9,18 +8,18 @@ import { CLIParserResponse } from './index.types'
  * @returns {CLIParserResponse}
  */
 export async function CLIParser(): Promise<CLIParserResponse> {
-  const _argv = await yargs(hideBin(process.argv)).argv
+  // Construct program
+  program
+    .option('--force')
+    .option('--stdout', 'Print stdout', false)
+    .option('-s, --separator <char>')
 
-  // Construct arguments
-  const args = _argv._
+  // Parse options
+  program.parse()
 
-  // Construct options
-  const opts: any = {}
-  Object.keys(_argv).map(function (something) {
-    if (something !== '_' && something.substring(0, 1) !== '$') {
-      opts[something] = _argv[something]
-    }
-  })
+  const _argv = null
+  const args = program.args
+  const opts = program.opts()
 
   return {
     _argv,
