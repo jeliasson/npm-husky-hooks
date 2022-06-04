@@ -2,8 +2,6 @@ name: "📦 publish"
 
 on:
   push:
-    branches:
-      - main
     tags:
       - "*"
 
