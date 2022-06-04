@@ -41,9 +41,19 @@ jobs:
       - name: Test
         run: |
 
-          # Update protectedBranches
+          # Remove current config
+          rm husky-hooks.config.js
+
+          # Test create-config
+          npx @jeliasson/husky-hooks pre-commit
+
+          # Test create-config with --force
+          npx @jeliasson/husky-hooks pre-commit --force
+
+          # Update protectedBranches to be []
           cp husky-hooks.config.js husky-hooks.config.js.bak && \
           cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches = []/' > husky-hooks.config.js
 
+          # Test hooks
           npx @jeliasson/husky-hooks pre-commit
           npx @jeliasson/husky-hooks pre-push
