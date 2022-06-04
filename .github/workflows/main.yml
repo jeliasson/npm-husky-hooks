@@ -37,3 +37,8 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Test
+        run: |
+          npx @jeliasson/husky-hooks pre-commit
+          npx @jeliasson/husky-hooks pre-push
