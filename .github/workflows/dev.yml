@@ -38,7 +38,20 @@ jobs:
       - name: Build
         run: yarn build
 
+      # This will probabaly fail, as dev is in the branch. Maybe we should delete it first,
+      # then create a new config, empty the protectedBranches, and then test. 🤔
       - name: Test
         run: |
+
+          # Remove current config
+          rm husky-hooks.config.js
+
+          # Create config
+          npx @jeliasson/husky-hooks create-config
+
+          # Update protectedBranches
+          cp husky-hooks.config.js husky-hooks.config.js.bak && \
+          cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches = []/' > husky-hooks.config.js
+
           npx @jeliasson/husky-hooks pre-commit
           npx @jeliasson/husky-hooks pre-push
