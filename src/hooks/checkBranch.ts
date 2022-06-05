@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 
-import { ThrowError, useHookResponse } from '../cli/response'
+import { useHookResponse } from '../cli/response'
 import { getConfigSettingByName } from '../config'
 import { HookResponse } from '../hooks/index.types'
 
@@ -12,13 +12,6 @@ export async function checkBranch(): Promise<HookResponse> {
     'check-branch',
     'protectedBranches'
   )
-
-  // Checks
-  if (!protectedBranchesSetting.value)
-    ThrowError([`Missing ${protectedBranchesSetting.path} in config.`])
-
-  if (typeof protectedBranchesSetting.value !== 'object')
-    ThrowError([`Config ${protectedBranchesSetting.path} must be an array.`])
 
   // Exec command
   const exec = execSync(`git branch --show-current`, {

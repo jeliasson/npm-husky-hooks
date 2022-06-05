@@ -17,12 +17,10 @@ export async function CLIParser(): Promise<CLIParserResponse> {
   // Parse options
   program.parse()
 
-  const _argv = null
   const args = program.args
   const opts = program.opts()
 
   return {
-    _argv,
     args,
     opts,
   }

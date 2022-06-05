@@ -14,3 +14,7 @@ export const hooks = <Hooks>{
   'test-sleep': testSleep,
   'test-check-ip': testCheckIp,
 }
+
+export function getHooksAsArray(): string[] {
+  return Object.keys(hooks).map((key) => key)
+}
