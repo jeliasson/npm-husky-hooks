@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 
 import { useHookResponse } from '../cli/response'
+
 import { HookResponse } from '../hooks/index.types'
 
 export async function testCheckIp(): Promise<HookResponse> {

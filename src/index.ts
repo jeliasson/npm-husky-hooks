@@ -1,9 +1,12 @@
+import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
+
+import { Config } from './types'
+
 import { CLIParser } from './cli'
 import { ThrowError } from './cli/response'
+
 import { runCommand } from './commands'
-import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
 import { runHook } from './hooks'
-import { Config } from './types'
 
 export async function init(): Promise<void> {
   const { args, opts } = await CLIParser()

@@ -1,5 +1,7 @@
-import { useHookResponse } from '../cli/response'
 import { getConfigSettingByName } from '../config'
+
+import { useHookResponse } from '../cli/response'
+
 import { HookResponse } from '../hooks/index.types'
 
 export async function testSleep(): Promise<HookResponse> {

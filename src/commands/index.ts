@@ -1,4 +1,5 @@
 import { PACKAGE_NAME } from '../config'
+
 import { createConfigCommand } from './createConfig'
 import { Commands } from './index.types'
 
