@@ -52,10 +52,13 @@ export async function createConfig(force = false): Promise<Config | false> {
 
   // Check if the config file already exists
   if ((await configExists()) && !force)
-    ThrowError([
-      `Config ${CONFIG_FILE} already exists`,
-      `To override, run 'npx ${PACKAGE_NAME} create-config --force'`,
-    ])
+    ThrowError(
+      [
+        `Config ${CONFIG_FILE} already exists`,
+        `To override, run 'npx ${PACKAGE_NAME} create-config --force'`,
+      ],
+      false
+    )
 
   // Check if the orginal config file exists
   if (!(await orginalConfigExists()))

@@ -1,8 +1,8 @@
 import fs from 'fs'
 
-import { useHookResponse } from '../cli/response'
+import { HookResponse } from '../types/hooks'
 
-import { HookResponse } from '../hooks/index.types'
+import { useHookResponse } from '../cli/response'
 
 export async function checkLockFiles(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

@@ -18,8 +18,7 @@ module.exports = {
         groups: [
           'module',
           'absolute',
-          '/^..*/config/',
-          '/^..*/types/',
+          ['/^..*/config/', '/^..*/types/'],
           '/^..*/cli/',
           ['/^..*/commands/', '/^..*/hooks/'],
           '/^@/',

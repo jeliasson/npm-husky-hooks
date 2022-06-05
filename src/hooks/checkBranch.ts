@@ -1,16 +1,15 @@
 import { execSync } from 'child_process'
 
 import { getConfigSettingByName } from '../config'
+import { HookResponse } from '../types/hooks'
 
 import { useHookResponse } from '../cli/response'
-
-import { HookResponse } from '../hooks/index.types'
 
 export async function checkBranch(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()
 
   // Protected branch setting
-  const protectedBranchesSetting = await getConfigSettingByName(
+  const protectedBranches = await getConfigSettingByName(
     'check-branch',
     'protectedBranches'
   )
@@ -25,8 +24,8 @@ export async function checkBranch(): Promise<HookResponse> {
   const branch = exec.toString('utf8').replace(/[\n\r\s]+$/, '')
 
   if (
-    Array.isArray(protectedBranchesSetting.value) &&
-    protectedBranchesSetting.value.includes(branch)
+    Array.isArray(protectedBranches.value) &&
+    protectedBranches.value.includes(branch)
   ) {
     errors.push(`Branch "${branch}" is protected.`)
   }

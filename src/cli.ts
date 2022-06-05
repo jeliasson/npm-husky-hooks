@@ -1,9 +1,9 @@
 import { program } from 'commander'
 
-import { CLIParserResponse } from './index.types'
+import { CLIParserResponse } from './types/cli'
 
 /**
- * CLI parser
+ * CLIParser parser
  *
  * @returns {CLIParserResponse}
  */
@@ -12,6 +12,7 @@ export async function CLIParser(): Promise<CLIParserResponse> {
   program
     .option('--force')
     .option('--stdout', 'Print stdout', false)
+    .option('-v, --version', 'Print version', false)
     .option('-s, --separator <char>')
 
   // Parse options

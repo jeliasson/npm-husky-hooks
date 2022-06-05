@@ -1,5 +1,4 @@
 import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
-
 import { Config } from './types'
 
 import { CLIParser } from './cli'
@@ -68,11 +67,9 @@ export async function init(): Promise<void> {
 
       if (response?.errors && response.errors.length > 0) {
         // Print errors
-        console.log(
-          '',
-          response.errors.map((error: string) => console.error(`${error}`)),
-          ''
-        )
+
+        console.log()
+        response.errors.map((error: string) => console.log(`${error}`))
 
         // Exit
         process.exit(1)
