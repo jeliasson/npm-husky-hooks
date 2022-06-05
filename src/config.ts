@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ThrowError, ThrowException } from './cli/response'
 import { Config, ConfigSchema, SettingByName, SettingsByName } from './types'
+
+import { ThrowError, ThrowException } from './cli/response'
 
 const fsp = fs.promises
 

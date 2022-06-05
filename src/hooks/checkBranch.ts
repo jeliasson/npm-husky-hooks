@@ -1,7 +1,9 @@
 import { execSync } from 'child_process'
 
-import { useHookResponse } from '../cli/response'
 import { getConfigSettingByName } from '../config'
+
+import { useHookResponse } from '../cli/response'
+
 import { HookResponse } from '../hooks/index.types'
 
 export async function checkBranch(): Promise<HookResponse> {
