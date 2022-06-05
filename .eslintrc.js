@@ -15,7 +15,15 @@ module.exports = {
       'warn',
       {
         newlinesBetween: 'always',
-        groups: ['absolute', 'module', '/^@/', ['parent', 'sibling', 'index']],
+        groups: [
+          'module',
+          'absolute',
+          ['/^..*/config/', '/^..*/types/'],
+          '/^..*/cli/',
+          ['/^..*/commands/', '/^..*/hooks/'],
+          '/^@/',
+          ['parent', 'sibling', 'index'],
+        ],
         alphabetize: { order: 'asc', ignoreCase: true },
       },
     ],

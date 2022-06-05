@@ -233,25 +233,7 @@ yarn link @jeliasson/husky-hooks
 
 ### Todo
 
-**General**
-
-- [ ] Move this to GitHub Issues
-- [x] Use this package in the development
-- [x] ~~Make sure config is created upon first command instead manually copying it in from node_modules~~
-- [x] Create a `create-config` command
-- [x] Be able to run ad-hoc commands
-- [ ] Refactor and make stable
-- [ ] Write tests
-- [ ] CI/CD for testing
-- [ ] Use [zod](https://www.npmjs.com/package/zod) for configuration parsing
-- [ ] Replace yargs with [clipanion](https://www.npmjs.com/package/clipanion)
-- [ ] Add `stdout` as optional to all settings
-- [ ] 1.0.0 🚀
-
-**Hooks**
-
-- [ ] Some kind of hook to make sure no sensitive environment variables is passed
-- [ ] Add [cz-cli](https://github.com/commitizen/cz-cli) as 3rd party
+See [Issues](https://github.com/jeliasson/npm-husky-hooks/issues)
 
 ## Contributing
 

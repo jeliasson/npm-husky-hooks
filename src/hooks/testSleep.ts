@@ -1,24 +1,17 @@
-import { ThrowError, useHookResponse } from '../cli/response'
 import { getConfigSettingByName } from '../config'
-import { HookResponse } from '../hooks/index.types'
+import { HookResponse } from '../types/hooks'
+
+import { useHookResponse } from '../cli/response'
 
 export async function testSleep(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()
 
   // Get delay setting
-  const delaySetting = await getConfigSettingByName('test-sleep', 'delay')
-
-  // Checks
-  // @todo: Refactor to check package
-  if (!delaySetting.value)
-    ThrowError([`Missing ${delaySetting.path} as integer value in config.`])
-
-  if (!Number.isInteger(delaySetting.value))
-    ThrowError([`Setting ${delaySetting.path} is not a integer.`])
+  const delay = await getConfigSettingByName('test-sleep', 'delay')
 
   // Sleep
   await new Promise((resolve) =>
-    setTimeout(resolve, Number.parseInt(delaySetting.value as string, 10))
+    setTimeout(resolve, Number.parseInt(delay.value as string, 10))
   )
 
   return { stdout, errors }

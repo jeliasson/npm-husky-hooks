@@ -1,5 +1,5 @@
-import { CommandResponse } from '../commands/index.types'
-import { HookResponse } from '../hooks/index.types'
+import { CommandResponse } from '../types/commands'
+import { HookResponse } from '../types/hooks'
 
 /**
  * Throw success
@@ -23,10 +23,10 @@ export function ThrowSuccess(messages: string[]): Error {
  * @returns <Error>                 Console.log formatted error messages
  *                                  with Process.exit(1)
  */
-export function ThrowError(messages: string[]): Error {
+export function ThrowError(messages: string[], prefixStopSign = true): Error {
   const formated = messages.map((message) => `${message}`).join('\n')
 
-  console.log(`❌\n\n❌ Error\n\n${formated}`)
+  console.log(`${prefixStopSign ? '❌' : ''}\n❌ Error\n\n${formated}`)
 
   process.exit(1)
 }
