@@ -1,15 +1,94 @@
-import { hooks } from './hooks'
-import { HookResponse } from './hooks/index.types'
+import { CLIParser } from './cli'
+import { ThrowError } from './cli/response'
+import { runCommand } from './commands'
+import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
+import { runHook } from './hooks'
+import { Config } from './types'
 
-/**
- * Execute hook
- *
- * @param   {string} name               Name of hook to run
- * @returns {Promise<HookResponse>}
- */
-export async function runHook(name: string, arg = ''): Promise<HookResponse> {
-  const hook = hooks[name]
+export async function init(): Promise<void> {
+  const { args, opts } = await CLIParser()
 
-  if (hook) return await hook(arg)
-  throw new Error(`Hook with ${name} not found`)
+  // Command
+  const [command] = args
+  await runCommand(command)
+
+  // Config
+  const config = await getConfig()
+  await validateConfig(config)
+
+  // Get all hooks related to the command
+  const allHooks = config.hooks[command as keyof Config['hooks']]
+
+  // Hooks
+  if (!allHooks) {
+    console.log(`\n❌ Unknown command ${command}.\n`)
+    Object.keys(config.hooks).map(function (command) {
+      console.log(`> npx ${PACKAGE_NAME} ${command}`)
+    })
+
+    process.exit(1)
+  }
+
+  // Loop thru all hooks
+  for (const hook of allHooks) {
+    // Hooks to run and with possible options
+    // @todo: Make this prettier. Kill it with fire.
+    let run = null
+    let arg = undefined
+
+    switch (typeof hook) {
+      case 'string':
+        run = hook
+        process.stdout.write(`Running hook ${run}... `)
+        break
+
+      case 'object':
+        ;[run, arg] = hook
+        process.stdout.write(`Running hook ${run} with argument '${arg}'... `)
+        break
+
+      default: // Just adds run below to make TS happy
+        run = '__nothing__'
+        ThrowError([
+          `Unknown type '${typeof hook}' for hook '${hook}'.`,
+          `It's probabaly a typo in the hooks section of the ${CONFIG_FILE} config file.`,
+        ])
+        break
+    }
+
+    try {
+      // Run the hook
+      const response = await runHook(run, arg)
+
+      // Print a response icon
+      console.log(response?.errors && response.errors.length > 0 ? '❌' : '✅')
+
+      if (response?.errors && response.errors.length > 0) {
+        // Print errors
+        console.log(
+          '',
+          response.errors.map((error: string) => console.error(`${error}`)),
+          ''
+        )
+
+        // Exit
+        process.exit(1)
+      } else {
+        const stdout = response?.stdout ? response.stdout : null
+        if (stdout && opts.stdout) {
+          // Print stdout if --stdout was passed
+          // @todo: Fix this ugliness
+          if (stdout.length > 0) console.log()
+          stdout.map((line: string) => console.log(`${line}`))
+          if (stdout.length > 0) console.log()
+        }
+      }
+    } catch (error) {
+      console.log(`❌\n\n`, error)
+
+      process.exit(1)
+    }
+  }
 }
+
+init()
