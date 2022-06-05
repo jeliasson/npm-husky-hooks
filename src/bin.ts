@@ -3,8 +3,9 @@
 import { CLIParser } from './cli'
 import { ThrowError } from './cli/response'
 import { commands } from './commands'
-import { CONFIG_FILE, getConfig, PACKAGE_NAME } from './config'
+import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
 import { runHook } from './index'
+import { Config } from './types'
 
 async function init() {
   // CLI
@@ -46,11 +47,17 @@ async function init() {
     process.exit(1)
   }
 
+  // Get config
+  const config = await getConfig()
+
+  // Validate config
+  await validateConfig(config)
+  const allHooks = config.hooks[command as keyof Config['hooks']]
+
   //
   // Hooks
   //
-  const config = await getConfig()
-  if (!config?.hooks[command]) {
+  if (!allHooks) {
     console.log()
     console.log(`❌ Unknown command ${command}.`)
     console.log()
@@ -61,14 +68,11 @@ async function init() {
     process.exit(1)
   }
 
-  // Make a list of hooks to run
-  const hooks = config.hooks[command]
-
   // Run each hook
-  for (const hook of hooks) {
+  for (const hook of allHooks) {
     // Hooks to run and with possible options
     let run = null
-    let arg = null
+    let arg = undefined
 
     switch (typeof hook) {
       case 'string':
@@ -82,7 +86,8 @@ async function init() {
         process.stdout.write(`Running hook ${run} with argument '${arg}'... `)
         break
 
-      default:
+      default: // Just adds run below to make TS happy
+        run = '__nothing__'
         ThrowError([
           `Unknown type '${typeof hook}' for hook '${hook}'.`,
           `It's probabaly a typo in the hooks section of the ${CONFIG_FILE} config file.`,
@@ -95,8 +100,7 @@ async function init() {
       const response = await runHook(run, arg)
 
       // Print a response icon
-      const icon = response?.errors && response.errors.length > 0 ? '❌' : '✅'
-      console.log(icon)
+      console.log(response?.errors && response.errors.length > 0 ? '❌' : '✅')
 
       if (response?.errors && response.errors.length > 0) {
         // Print errors

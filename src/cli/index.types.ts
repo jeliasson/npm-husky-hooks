@@ -1,5 +1,6 @@
 export type CLIParserResponse = {
-  _argv: any
-  args: any
-  opts: any
+  args: string[]
+  opts: {
+    [key: string]: boolean | number | string
+  }
 }
