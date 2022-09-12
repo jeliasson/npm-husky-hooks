@@ -38,48 +38,41 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Link
+      # @todo: Figure out why we would need this
+      - name: Fix - Link package
         run: |
           yarn link
 
       # @todo: Why would this be needed?
-      - name: Ensure executable permissions
+      - name: Fix - Executable permissions
         run: |
           chmod +x ./lib/bin.js
 
-      - name: Display current version
-        run: |
-          jq -r .version ./node_modules/@jeliasson/husky-hooks/package.json
-
-      - name: Delete current config
+      - name: Fix - Delete current config
         run: |
           rm husky-hooks.config.js
 
-      - name: Test create-config
+      - name: Test - Command 'create-config'
         run: |
           npx @jeliasson/husky-hooks create-config
 
-      - name: Test create-config --force
+      - name: Test - Command 'create-config --force'
         run: |
           npx @jeliasson/husky-hooks create-config --force
 
-      - name: Update protectedBranches to be []
+      - name: Fix - Update protectedBranches to be []
         run: |
           cp husky-hooks.config.js husky-hooks.config.js.bak && \
           cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
 
-      - name: Display config
+      - name: Debug - Display config
         run: |
           cat husky-hooks.config.js
 
-          # Test hooks
-          npx @jeliasson/husky-hooks pre-commit
-          npx @jeliasson/husky-hooks pre-push
-
-      - name: Test pre-commit hooks
+      - name: Test - 'pre-commit' hooks
         run: |
           npx @jeliasson/husky-hooks pre-commit
 
-      - name: Test pre-push hooks
+      - name: Test - 'pre-push' hooks
         run: |
           npx @jeliasson/husky-hooks pre-push
