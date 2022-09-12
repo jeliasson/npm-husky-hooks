@@ -38,25 +38,35 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Test
+      - name: Delete current config
         run: |
-
-          # Remove current config
           rm husky-hooks.config.js
 
-          # Test create-config
+      - name: Test create-config
+        run: |
           npx @jeliasson/husky-hooks create-config
 
-          # Test create-config with --force
+      - name: Test create-config --force
+        run: |
           npx @jeliasson/husky-hooks create-config --force
 
-          # Update protectedBranches to be []
+      - name: Update protectedBranches to be []
+        run: |
           cp husky-hooks.config.js husky-hooks.config.js.bak && \
           cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
 
-          # Display config
+      - name: Display config
+        run: |
           cat husky-hooks.config.js
 
           # Test hooks
           npx @jeliasson/husky-hooks pre-commit
+          npx @jeliasson/husky-hooks pre-push
+
+      - name: Test pre-commit hooks
+        run: |
+          npx @jeliasson/husky-hooks pre-commit
+
+      - name: Test pre-push hooks
+        run: |
           npx @jeliasson/husky-hooks pre-push
