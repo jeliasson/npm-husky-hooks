@@ -38,6 +38,10 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Link
+        run: |
+          yarn link
+
       # @todo: Why would this be needed?
       - name: Ensure executable permissions
         run: |
