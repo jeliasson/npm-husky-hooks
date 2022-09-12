@@ -38,10 +38,10 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Link package
+      # @todo: Why would this be needed?
+      - name: Ensure executable permissions
         run: |
-          yarn link
-          yarn link "@jeliasson/husky-hooks"
+          chmod +x ./lib/bin.js
 
       - name: Delete current config
         run: |
