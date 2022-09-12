@@ -47,6 +47,10 @@ jobs:
         run: |
           chmod +x ./lib/bin.js
 
+      - name: Display current version
+        run: |
+          jq -r .version ./node_modules/@jeliasson/husky-hooks/package.json
+
       - name: Delete current config
         run: |
           rm husky-hooks.config.js
