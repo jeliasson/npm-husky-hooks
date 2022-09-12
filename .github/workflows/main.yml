@@ -38,6 +38,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Link package
+        run: yarn link
+
       - name: Build
         run: yarn build
 
