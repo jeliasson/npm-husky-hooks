@@ -1,10 +1,10 @@
 # `@jeliasson/husky-hooks`
 
+![NPM](https://img.shields.io/npm/l/@jeliasson/husky-hooks)
+![npm bundle size](https://img.shields.io/bundlephobia/min/@jeliasson/husky-hooks)
+![npm](https://img.shields.io/npm/v/@jeliasson/husky-hooks)
 ![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@jeliasson/husky-hooks)
 ![GitHub issues](https://img.shields.io/github/issues/jeliasson/husky-hooks)
-![NPM](https://img.shields.io/npm/l/@jeliasson/husky-hooks)
-![npm](https://img.shields.io/npm/v/@jeliasson/husky-hooks)
-![npm bundle size](https://img.shields.io/bundlephobia/min/@jeliasson/husky-hooks)
 
 This npm package aims to increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
 
