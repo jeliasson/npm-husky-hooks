@@ -39,7 +39,9 @@ jobs:
         run: yarn build
 
       - name: Link package
-        run: yarn link
+        run: |
+          yarn link
+          yarn link "@jeliasson/husky-hooks"
 
       - name: Build
         run: yarn build
