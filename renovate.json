@@ -1,4 +1,14 @@
 {
   "extends": ["config:base"],
-  "baseBranches": ["dev"]
+  "baseBranches": ["dev"],
+  "labels": ["deps"],
+  "automergeStrategy": "squash",
+  "automergeSchedule": "after 1am and before 4am",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true,
+      "stabilityDays": 7
+    }
+  ]
 }
