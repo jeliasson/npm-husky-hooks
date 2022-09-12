@@ -10,17 +10,16 @@ This npm package aims to increase the developer experience and consistency by pr
 
 > :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
 
-- [`@jeliasson/husky-hooks`](#jeliassonhusky-hooks)
-  - [Setup](#setup)
-  - [Hooks](#hooks)
-      - [`check-branch`](#check-branch)
-      - [`check-lock-files`](#check-lock-files)
-      - [`run-cmd`](#run-cmd)
-  - [Other](#other)
-  - [Development](#development)
-    - [Prerequisites](#prerequisites)
-    - [Todo](#todo)
-  - [Contributing](#contributing)
+- [Setup](#setup)
+- [Hooks](#hooks)
+    - [`check-branch`](#check-branch)
+    - [`check-lock-files`](#check-lock-files)
+    - [`run-cmd`](#run-cmd)
+- [Other](#other)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+  - [Todo](#todo)
+- [Contributing](#contributing)
 
 ## Setup
 
