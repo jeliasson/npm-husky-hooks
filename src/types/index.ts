@@ -6,7 +6,7 @@ export type SettingsByName = {
 }
 
 export type SettingByName = {
-  value: [] | boolean | number | string | object
+  value: boolean | number | string | string[] | object
   path: string
 }
 
