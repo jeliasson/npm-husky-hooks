@@ -24,7 +24,7 @@ export async function checkLockFiles(): Promise<HookResponse> {
   for (const file of denyLockFiles.value) {
     if (fs.existsSync(file)) {
       errors.push(
-        `Invalid occurence of "${file}" file. Please remove it and only use "${allowLockFile}"`
+        `Invalid occurence of "${file}" file. Please remove it and only use "${allowLockFile.value}"`
       )
     }
   }
@@ -33,11 +33,11 @@ export async function checkLockFiles(): Promise<HookResponse> {
     const content = fs.readFileSync(allowLockFile.value, 'utf-8')
     if (content.match(/localhost:487/)) {
       errors.push(
-        `The "${allowLockFile}" has reference to local yarn repository ("localhost:4873"). Please use "registry.yarnpkg.com" in "${allowLockFile}"`
+        `The "${allowLockFile.value}" has reference to local yarn repository ("localhost:4873"). Please use "registry.yarnpkg.com" in "${allowLockFile}"`
       )
     }
   } catch {
-    errors.push(`The "${allowLockFile}" does not exist or cannot be read`)
+    errors.push(`The "${allowLockFile.value}" does not exist or cannot be read`)
   }
 
   return { stdout, errors }
