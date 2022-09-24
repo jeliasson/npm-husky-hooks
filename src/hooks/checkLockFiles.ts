@@ -1,5 +1,6 @@
 import fs from 'fs'
 
+import { getConfigSettingByName } from '../config'
 import { HookResponse } from '../types/hooks'
 
 import { useHookResponse } from '../cli/response'
@@ -7,27 +8,42 @@ import { useHookResponse } from '../cli/response'
 export async function checkLockFiles(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()
 
-  const allowLockFile = 'yarn.lock'
-  const denyLockFiles = ['package-lock.json', 'pnpm-lock.yaml']
+  // Allowed lock file
+  const allowLockFile = await getConfigSettingByName(
+    'check-lock-files',
+    'allowLockFile'
+  )
+
+  // Deny lock files
+  const denyLockFiles = await getConfigSettingByName(
+    'check-lock-files',
+    'denyLockFiles'
+  )
 
   // Check files
-  for (const file of denyLockFiles) {
+  for (const file of <string[]>denyLockFiles.value) {
     if (fs.existsSync(file)) {
       errors.push(
-        `Invalid occurence of "${file}" file. Please remove it and only use "${allowLockFile}"`
+        `Invalid occurence of "${file}" file. Please remove it and only use "${<
+          string
+        >allowLockFile.value}"`
       )
     }
   }
 
   try {
-    const content = fs.readFileSync(allowLockFile, 'utf-8')
+    const content = fs.readFileSync(<string>allowLockFile.value, 'utf-8')
     if (content.match(/localhost:487/)) {
       errors.push(
-        `The "${allowLockFile}" has reference to local yarn repository ("localhost:4873"). Please use "registry.yarnpkg.com" in "${allowLockFile}"`
+        `The "${<string>(
+          allowLockFile.value
+        )}" has reference to local yarn repository ("localhost:4873"). Please use "registry.yarnpkg.com" in "${allowLockFile}"`
       )
     }
   } catch {
-    errors.push(`The "${allowLockFile}" does not exist or cannot be read`)
+    errors.push(
+      `The "${<string>allowLockFile.value}" does not exist or cannot be read`
+    )
   }
 
   return { stdout, errors }
