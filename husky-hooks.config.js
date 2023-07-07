@@ -25,7 +25,7 @@ const config = {
      */
     'check-branch': {
       // Git branches that should be protected from accidental commit or push
-      protectedBranches: ['main', 'dev'],
+      protectedBranches: ['main'],
     },
 
     /**
