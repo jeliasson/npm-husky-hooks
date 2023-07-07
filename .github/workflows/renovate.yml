@@ -1,0 +1,79 @@
+name: "🤖 renovate"
+
+on:
+  push:
+    branches:
+      - renovate/**
+
+    paths:
+      - ".github/workflows/renovate.yml"
+      - "package.json"
+      - "yarn.lock"
+
+env:
+  NODE_ENV: "development"
+  RUNTIME_ENV: "main"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        version: [16, 18, 20]
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+
+      - name: Install depencencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      # @todo: Figure out why we would need this
+      - name: Fix - Link package
+        run: |
+          yarn link
+
+      # @todo: Why would this be needed?
+      - name: Fix - Executable permissions
+        run: |
+          chmod +x ./lib/bin.js
+
+      - name: Fix - Delete current config
+        run: |
+          rm husky-hooks.config.js
+
+      - name: Test - Command 'create-config'
+        run: |
+          npx @jeliasson/husky-hooks create-config
+
+      - name: Test - Command 'create-config --force'
+        run: |
+          npx @jeliasson/husky-hooks create-config --force
+
+      - name: Fix - Update protectedBranches to be []
+        run: |
+          cp husky-hooks.config.js husky-hooks.config.js.bak && \
+          cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
+
+      - name: Debug - Display config
+        run: |
+          cat husky-hooks.config.js
+
+      - name: Test - 'pre-commit' hooks
+        run: |
+          npx @jeliasson/husky-hooks pre-commit
+
+      - name: Test - 'pre-push' hooks
+        run: |
+          npx @jeliasson/husky-hooks pre-push
