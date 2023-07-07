@@ -3,7 +3,6 @@ name: "🧪 research"
 on:
   push:
     branches:
-      - renovate/**
       - fix/**
       - feature/**
       - issue/**
