@@ -3,6 +3,7 @@ name: "🧪 research"
 on:
   push:
     branches:
+      - renovate/**
       - fix/**
       - feature/**
       - issue/**
@@ -26,7 +27,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        version: [14, 16, 18]
+        version: [16, 18, 20]
         os: [ubuntu-latest]
 
     steps:
