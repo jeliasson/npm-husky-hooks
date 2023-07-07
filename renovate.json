@@ -1,6 +1,6 @@
 {
   "extends": ["config:base"],
-  "baseBranches": ["dev"],
+  "baseBranches": ["main"],
   "labels": ["deps"],
   "automergeStrategy": "squash",
   "automergeSchedule": "after 1am and before 4am",
