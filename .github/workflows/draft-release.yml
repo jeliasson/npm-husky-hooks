@@ -58,23 +58,39 @@ jobs:
             exit 1
           fi
 
+      - name: Set branch name
+        run: |
+          echo "BRANCH_NAME=release/${NEW_VERSION//./-}" >> $GITHUB_ENV
+
       - name: Version bump
         id: version-bump
         run: |
           npm --no-git-tag-version version "$NEW_VERSION"
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Version commit
-        uses: EndBug/add-and-commit@v9
+      - name: Create pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
         with:
-          add: "package.json"
-          default_author: github_actor
-          message: "feat(repo): ${{ steps.version-bump.outputs.version }}"
-          push: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          delete-branch: true
+          branch: ${{ env.BRANCH_NAME }}
+          commit-message: "feat(repo): ${{ env.NEW_VERSION }}"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          title: "feat(repo): ${{ env.NEW_VERSION }}"
+          draft: false
+          #labels: |
+          #  docs
+          body: |
+            Bumps version to ${{ env.NEW_VERSION }}
 
-      - name: Create release draft
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          name: ${{ steps.version-bump.outputs.version }}
-          tag_name: ${{ steps.version-bump.outputs.version }}
+          add-paths: |
+            package.json
+
+      - name: "Debug: Check outputs"
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
