@@ -24,6 +24,10 @@ jobs:
     name: Build
     runs-on: ubuntu-20.04
     timeout-minutes: 15
+    strategy:
+      matrix:
+        version: [16, 18, 20]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout source code
@@ -32,7 +36,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.version }}
 
       - name: Install depencencies
         run: yarn install
