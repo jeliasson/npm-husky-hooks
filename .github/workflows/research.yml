@@ -1,12 +1,14 @@
-name: "⚒️ issue"
+name: "🧪 research"
 
 on:
   push:
     branches:
+      - fix/**
+      - feature/**
       - issue/**
 
     paths:
-      - ".github/workflows/issue.yml"
+      - ".github/workflows/research.yml"
       - "src/**"
       - "husky-hooks.config.default.js"
       - "package.json"
