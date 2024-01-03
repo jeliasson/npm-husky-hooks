@@ -210,7 +210,7 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ### Prerequisites
 
-- NodeJS >= 14
+- NodeJS >= 16
 - yarn
 
 From the package directory, run
