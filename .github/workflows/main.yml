@@ -30,7 +30,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Install depencencies
         run: yarn install
