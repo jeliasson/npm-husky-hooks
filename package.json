@@ -39,7 +39,7 @@
     "typescript": "5.4.2"
   },
   "engines": {
-    "node": ">=16.0",
+    "node": ">=18.18.0",
     "yarn": ">=1.15"
   },
   "main": "lib/index.js",
