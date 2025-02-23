@@ -1,15 +1,15 @@
 const config = {
   hooks: {
     'pre-commit': [
-      ['run-cmd', 'yarn lint'],
-      ['run-cmd', 'yarn format'],
+      ['run-cmd', 'npm run lint'],
+      ['run-cmd', 'npm run format'],
       'check-branch',
       'check-lock-files',
     ],
 
     'pre-push': [
       ['run-cmd', 'tsc'],
-      ['run-cmd', 'yarn lint'],
+      ['run-cmd', 'npm run lint'],
       'check-branch',
       'check-lock-files',
     ],
@@ -33,14 +33,14 @@ const config = {
      *
      * Check for package manager lock files, and abort if any are present
      * lock file that we don't want. This is useful to ensure that e.g.
-     * only yarn.lock is present in the repository.
+     * only package-lock.json is present in the repository.
      */
     'check-lock-files': {
       // Package manager lock file that should be present in the repository
-      allowLockFile: 'yarn.lock',
+      allowLockFile: 'package-lock.json',
 
       // Package manager lock files that should yield a abort
-      denyLockFiles: ['package-lock.json', 'pnpm-lock.yaml'],
+      denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'],
     },
 
     /**

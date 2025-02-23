@@ -14,7 +14,7 @@ export async function runCmd(command: string): Promise<HookResponse> {
       `It's probabaly a typo in the hooks section of the ${CONFIG_FILE} config file.`,
       '',
       'Example:',
-      "['run-cmd', 'yarn lint']",
+      "['run-cmd', 'npm run lint']",
     ])
 
   try {
