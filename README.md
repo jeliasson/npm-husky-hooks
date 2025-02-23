@@ -210,25 +210,25 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ### Prerequisites
 
-- NodeJS >= 18.18.0
-- yarn
+- NodeJS >= 20.18.3
+- npm >= 10.8.2
 
 From the package directory, run
 
 ```bash
-yarn link
+npm link
 ```
 
 Start tsc watch
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 From the test project directory, run
 
 ```bash
-yarn link @jeliasson/husky-hooks
+npm link @jeliasson/husky-hooks
 ```
 
 ### Todo
