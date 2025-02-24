@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import './index.ts';
+import './index.js';
