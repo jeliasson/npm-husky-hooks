@@ -45,7 +45,7 @@ jobs:
         run: npm run build
 
       - name: Debug
-        run: find . | grep -v "node_modules"
+        run: find . | grep -v "node_modules" | grep -v ".git"
 
       - name: Fix - Link package
         run: |
