@@ -4,8 +4,10 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "lib",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "resolveJsonModule": true
   },
   "include": ["src"],

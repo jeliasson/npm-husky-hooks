@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 
-import { HookResponse } from '../types/hooks'
+import { HookResponse } from '../types/hooks.ts'
 
-import { useHookResponse } from '../cli/response'
+import { useHookResponse } from '../cli/response.ts'
 
 export async function testCheckIp(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

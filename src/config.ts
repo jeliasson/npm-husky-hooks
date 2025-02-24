@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import { Config, ConfigSchema, SettingByName, SettingsByName } from './types'
+import { Config, ConfigSchema, SettingByName, SettingsByName } from './types/index.ts'
 
-import { ThrowError, ThrowException } from './cli/response'
+import { ThrowError, ThrowException } from './cli/response.ts'
 
 const fsp = fs.promises
 

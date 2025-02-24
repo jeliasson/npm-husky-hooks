@@ -1,9 +1,9 @@
 import { execSync } from 'child_process'
 
-import { CONFIG_FILE } from '../config'
-import { HookResponse } from '../types/hooks'
+import { CONFIG_FILE } from '../config.ts'
+import { HookResponse } from '../types/hooks.ts'
 
-import { ThrowError, useHookResponse } from '../cli/response'
+import { ThrowError, useHookResponse } from '../cli/response.ts'
 
 export async function runCmd(command: string): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

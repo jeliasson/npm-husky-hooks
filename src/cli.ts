@@ -1,6 +1,6 @@
 import { program } from 'commander'
 
-import { CLIParserResponse } from './types/cli'
+import { CLIParserResponse } from './types/cli.ts'
 
 /**
  * CLIParser parser

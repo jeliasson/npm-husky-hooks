@@ -1,7 +1,7 @@
-import { PACKAGE_NAME } from './config'
-import { Commands } from './types/commands'
+import { PACKAGE_NAME } from './config.ts'
+import { Commands } from './types/commands.ts'
 
-import { createConfigCommand } from './commands/createConfig'
+import { createConfigCommand } from './commands/createConfig.ts'
 
 // Registered commands
 export const commands = <Commands>{

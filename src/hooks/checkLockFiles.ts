@@ -1,9 +1,9 @@
 import fs from 'fs'
 
-import { getConfigSettingByName } from '../config'
-import { HookResponse } from '../types/hooks'
+import { getConfigSettingByName } from '../config.ts'
+import { HookResponse } from '../types/hooks.ts'
 
-import { useHookResponse } from '../cli/response'
+import { useHookResponse } from '../cli/response.ts'
 
 export async function checkLockFiles(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()
