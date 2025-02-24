@@ -1,7 +1,7 @@
 import process from 'process'
 
-import { CommandResponse } from '../types/commands.ts'
-import { HookResponse } from '../types/hooks.ts'
+import { CommandResponse } from '../types/commands'
+import { HookResponse } from '../types/hooks'
 
 /**
  * Throw success

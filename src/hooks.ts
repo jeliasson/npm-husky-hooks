@@ -1,10 +1,10 @@
-import { HookResponse, Hooks } from './types/hooks.ts'
+import { HookResponse, Hooks } from './types/hooks'
 
-import { checkBranch } from './hooks/checkBranch.ts'
-import { checkLockFiles } from './hooks/checkLockFiles.ts'
-import { runCmd } from './hooks/runCmd.ts'
-import { testCheckIp } from './hooks/testCheckIp.ts'
-import { testSleep } from './hooks/testSleep.ts'
+import { checkBranch } from './hooks/checkBranch'
+import { checkLockFiles } from './hooks/checkLockFiles'
+import { runCmd } from './hooks/runCmd'
+import { testCheckIp } from './hooks/testCheckIp'
+import { testSleep } from './hooks/testSleep'
 
 export const events = ['pre-commit', 'pre-push']
 

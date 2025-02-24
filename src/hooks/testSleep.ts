@@ -1,7 +1,7 @@
-import { getConfigSettingByName } from '../config.ts'
-import { HookResponse } from '../types/hooks.ts'
+import { getConfigSettingByName } from '../config'
+import { HookResponse } from '../types/hooks'
 
-import { useHookResponse } from '../cli/response.ts'
+import { useHookResponse } from '../cli/response'
 
 export async function testSleep(): Promise<HookResponse> {
   const { stdout, errors } = useHookResponse()

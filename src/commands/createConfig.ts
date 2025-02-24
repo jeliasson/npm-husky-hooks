@@ -1,8 +1,8 @@
-import { CONFIG_FILE, createConfig } from '../config.ts'
-import { CommandResponse } from '../types/commands.ts'
+import { CONFIG_FILE, createConfig } from '../config'
+import { CommandResponse } from '../types/commands'
 
-import { CLIParser } from '../cli.ts'
-import { ThrowSuccess, useCommandResponse } from '../cli/response.ts'
+import { CLIParser } from '../cli'
+import { ThrowSuccess, useCommandResponse } from '../cli/response'
 
 export async function createConfigCommand(): Promise<CommandResponse> {
   const { stdout, errors } = useCommandResponse()

@@ -1,11 +1,11 @@
-import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config.ts'
-import { Config } from './types/index.ts'
+import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
+import { Config } from './types/index'
 
-import { CLIParser } from './cli.ts'
-import { ThrowError } from './cli/response.ts'
+import { CLIParser } from './cli'
+import { ThrowError } from './cli/response'
 
-import { runCommand } from './commands.ts'
-import { runHook } from './hooks.ts'
+import { runCommand } from './commands'
+import { runHook } from './hooks'
 
 export async function init(): Promise<void> {
   const { args, opts } = await CLIParser()
