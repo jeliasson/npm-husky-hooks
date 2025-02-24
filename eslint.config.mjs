@@ -5,9 +5,17 @@ import prettier from "eslint-config-prettier";
 import importHelpers from "eslint-plugin-import-helpers";
 
 export default [
-  js.configs.recommended, // Use ESLint's recommended JavaScript rules
+  js.configs.recommended,
   {
-    files: ["**/*.ts", "**/*.tsx"], // Apply these settings to TypeScript files
+    ignores: [
+      "husky-hooks.config.js",
+      "husky-hooks.config.default.js",
+      "prettier.config.js",
+      "lib/*"
+    ],
+  },
+  {
+    files: ["src/**/*.ts"],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: "latest",
@@ -18,8 +26,8 @@ export default [
       "import-helpers": importHelpers,
     },
     rules: {
-      ...ts.configs.recommended.rules, // Use recommended TypeScript rules
-      ...ts.configs.strict.rules, // Stricter TypeScript rules
+      ...ts.configs.recommended.rules,
+      ...ts.configs.strict.rules,
       "import-helpers/order-imports": [
         "warn",
         {

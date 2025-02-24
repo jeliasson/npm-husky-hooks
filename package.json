@@ -55,7 +55,7 @@
     "dev": "tsc-watch",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint --ignore-pattern .gitignore --ext .js,.ts,.tsx --fix .",
+    "lint": "eslint --fix .",
     "test": "jest --config jestconfig.json",
     "preinstall": "echo \"Error: no preinstall specified\" && exit 0",
     "install": "echo \"Error: no install specified\" && exit 0",
