@@ -27,17 +27,17 @@ First, make sure you have [husky](https://www.npmjs.com/package/husky) installed
 
 ```bash
 # Install husky dependency
-yarn add --dev husky
+npm install --save--dev husky
 
 # Install husky
-yarn husky install
+npx husky install
 ```
 
 Once you have husky installed, let's proceed with setting up `@jeliasson/husky-hooks` and connect it with husky's `pre-commit` and `pre-push` hooks.
 
 ```bash
 # Install dependency @jeliasson/husky-hooks
-yarn add --dev @jeliasson/husky-hooks
+npm install -save--dev @jeliasson/husky-hooks
 
 # Add package pre-commit hook
 npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
@@ -71,14 +71,14 @@ Running hook check-lock-files... ✅
 Running hook run with argument 'echo Test'... ✅
 ```
 
-...unless you have anything other than `yarn.lock` in your repo 😅
+...unless you have anything other than `package-lock.json` in your repo 😅
 
 ```bash
 Running hook test-sleep... ✅
 Running hook check-branch... ✅
 Running hook check-lock-files... ❌
 
-Invalid occurence of "package-lock.json" file. Remove it and only use "yarn.lock"
+Invalid occurence of "yarn.lock" file. Remove it and only use "package-lock.json"
 ```
 
 ## Hooks
@@ -130,7 +130,7 @@ Add `check-branch` hook to `pre-commit` and/or `pre-push`.
 
 #### `check-lock-files`
 
-Check for package manager lock files, and abort if any are present lock file that we don't want. This is useful to ensure that e.g. only`yarn.lock` is present in the repository.
+Check for package manager lock files, and abort if any are present lock file that we don't want. This is useful to ensure that e.g. only `package-lock.json` is present in the repository.
 
 **Setup**
 
@@ -159,10 +159,10 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
   settings: {
     'check-lock-files': {
       // Package manager lock file that should be present in the repository
-      allowLockFile: 'yarn.lock',
+      allowLockFile: 'package-lock.json',
 
       // Package manager lock files that should yield a abort
-      denyLockFiles: ['package-lock.json', 'pnpm-lock.yaml'],
+      denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'],
     },
   }
 }
@@ -170,26 +170,26 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
 
 #### `run-cmd`
 
-Run a ad-hoc command, for example `yarn lint`, and abort if the commands fails. This can be useful if you have other commands, for exmaple in your husky hooks, that you want to run as part of this package.
+Run a ad-hoc command, for example `npm run lint`, and abort if the commands fails. This can be useful if you have other commands, for exmaple in your husky hooks, that you want to run as part of this package.
 
 > :warning: **Note**: Still figuring out the best approach to capture stdout/stderr and present them where appropriate. It works fine for now.
 
 **Setup**
 
-Add `run-cmd` hooks to `pre-commit` and/or `pre-push`. It should be shaped as an array where the first argument is `run-cmd` and the second argument would be the command to run, e.g. `yarn lint`. In below example we have two ad-hoc commands for each hook.
+Add `run-cmd` hooks to `pre-commit` and/or `pre-push`. It should be shaped as an array where the first argument is `run-cmd` and the second argument would be the command to run, e.g. `npm run lint`. In below example we have two ad-hoc commands for each hook.
 
 ```js
 {
   hooks: {
     'pre-commit': [
       ['run-cmd', 'echo This is a pre-commit hook via run-cmd'],
-      ['run-cmd', 'yarn lint'],
+      ['run-cmd', 'npm run lint'],
       ...
     ],
 
     'pre-push': [
       ['run-cmd', 'echo This is a pre-push hook via run-cmd'],
-      ['run-cmd', 'yarn lint'],
+      ['run-cmd', 'npm run lint'],
       ...
     ],
   },
@@ -210,25 +210,25 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ### Prerequisites
 
-- NodeJS >= 18.18.0
-- yarn
+- NodeJS >= 20.18.3
+- npm >= 10.8.2
 
 From the package directory, run
 
 ```bash
-yarn link
+npm link
 ```
 
 Start tsc watch
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 From the test project directory, run
 
 ```bash
-yarn link @jeliasson/husky-hooks
+npm link @jeliasson/husky-hooks
 ```
 
 ### Todo

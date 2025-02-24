@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { Config, ConfigSchema, SettingByName, SettingsByName } from './types'
+import { Config, ConfigSchema, SettingByName, SettingsByName } from './types/index'
 
 import { ThrowError, ThrowException } from './cli/response'
 

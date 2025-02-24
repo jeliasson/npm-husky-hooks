@@ -1,3 +1,5 @@
+import process from 'process'
+
 import { CommandResponse } from '../types/commands'
 import { HookResponse } from '../types/hooks'
 

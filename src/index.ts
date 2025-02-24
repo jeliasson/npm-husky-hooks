@@ -1,5 +1,5 @@
 import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
-import { Config } from './types'
+import { Config } from './types/index'
 
 import { CLIParser } from './cli'
 import { ThrowError } from './cli/response'

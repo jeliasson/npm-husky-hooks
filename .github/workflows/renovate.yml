@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/workflows/renovate.yml"
       - "package.json"
-      - "yarn.lock"
+      - "package-lock.json"
 
 env:
   NODE_ENV: "development"
@@ -17,11 +17,11 @@ env:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       matrix:
-        version: [18, 20]
+        version: [20, 22]
         os: [ubuntu-latest]
 
     steps:
@@ -34,17 +34,16 @@ jobs:
           node-version: ${{ matrix.version }}
 
       - name: Install depencencies
-        run: yarn install
+        run: npm install
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       # @todo: Figure out why we would need this
       - name: Fix - Link package
         run: |
-          yarn link
+          npm link
 
-      # @todo: Why would this be needed?
       - name: Fix - Executable permissions
         run: |
           chmod +x ./lib/bin.js
