@@ -29,7 +29,7 @@
     "@typescript-eslint/eslint-plugin": "8.37.0",
     "@typescript-eslint/parser": "^8.24.1",
     "eslint": "9.31.0",
-    "eslint-config-prettier": "10.1.5",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-import-helpers": "2.0.1",
     "jest": "28.1.3",
