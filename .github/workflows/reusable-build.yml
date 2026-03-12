@@ -1,23 +1,17 @@
-name: "🧪 research"
+name: reusable-build
 
 on:
-  push:
-    branches:
-      - fix/**
-      - feature/**
-      - issue/**
-
-    paths:
-      - ".github/workflows/research.yml"
-      - "src/**"
-      - "husky-hooks.config.default.js"
-      - "package.json"
-      - "tsconfig.json"
-      - "package-lock.json"
+  workflow_call:
+    inputs:
+      node_versions:
+        description: 'Node.js versions to test'
+        required: false
+        type: string
+        default: '[20]'
 
 env:
-  NODE_ENV: "development"
-  RUNTIME_ENV: "main"
+  NODE_ENV: 'development'
+  RUNTIME_ENV: 'main'
 
 jobs:
   build:
@@ -26,7 +20,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        version: [20, 22]
+        version: ${{ fromJSON(inputs.node_versions) }}
         os: [ubuntu-latest]
 
     steps:
@@ -43,9 +37,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Debug
-        run: find . | grep -v "node_modules" | grep -v ".git"
 
       - name: Fix - Link package
         run: |

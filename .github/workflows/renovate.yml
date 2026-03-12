@@ -1,4 +1,4 @@
-name: "🤖 renovate"
+name: 🤖 Renovate
 
 on:
   push:
@@ -6,73 +6,12 @@ on:
       - renovate/**
 
     paths:
-      - ".github/workflows/renovate.yml"
-      - "package.json"
-      - "package-lock.json"
-
-env:
-  NODE_ENV: "development"
-  RUNTIME_ENV: "main"
+      - '.github/workflows/renovate.yml'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      matrix:
-        version: [20, 22]
-        os: [ubuntu-latest]
-
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.version }}
-
-      - name: Install depencencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      # @todo: Figure out why we would need this
-      - name: Fix - Link package
-        run: |
-          npm link
-
-      - name: Fix - Executable permissions
-        run: |
-          chmod +x ./lib/bin.js
-
-      - name: Fix - Delete current config
-        run: |
-          rm husky-hooks.config.js
-
-      - name: Test - Command 'create-config'
-        run: |
-          npx @jeliasson/husky-hooks create-config
-
-      - name: Test - Command 'create-config --force'
-        run: |
-          npx @jeliasson/husky-hooks create-config --force
-
-      - name: Fix - Update protectedBranches to be []
-        run: |
-          cp husky-hooks.config.js husky-hooks.config.js.bak && \
-          cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
-
-      - name: Debug - Display config
-        run: |
-          cat husky-hooks.config.js
-
-      - name: Test - 'pre-commit' hooks
-        run: |
-          npx @jeliasson/husky-hooks pre-commit
-
-      - name: Test - 'pre-push' hooks
-        run: |
-          npx @jeliasson/husky-hooks pre-push
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      node_versions: '[20, 22]'
