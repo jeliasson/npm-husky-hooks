@@ -7,7 +7,7 @@ on:
         description: 'Node.js versions to test'
         required: false
         type: string
-        default: '[20]'
+        default: '[24]'
 
 env:
   NODE_ENV: 'development'

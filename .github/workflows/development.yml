@@ -19,4 +19,4 @@ jobs:
   build:
     uses: ./.github/workflows/reusable-build.yml
     with:
-      node_versions: '[20, 22]'
+      node_versions: '[22, 24]'

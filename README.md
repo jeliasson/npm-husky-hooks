@@ -210,7 +210,7 @@ npx @jeliasson/husky-hooks pre-commit --stdout
 
 ### Prerequisites
 
-- NodeJS >= 20.18.3
+- NodeJS >= 22.16.0
 - npm >= 10.8.2
 
 From the package directory, run
