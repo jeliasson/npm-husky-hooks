@@ -39,7 +39,7 @@
     "typescript": "5.9.3"
   },
   "engines": {
-    "node": ">=20.18.2",
+    "node": ">=22.16.0",
     "npm": ">=10.8.2"
   },
   "main": "lib/index.js",
