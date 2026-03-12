@@ -1,12 +1,14 @@
-name: 🚀 Main
+name: 🧪 Development
 
 on:
   push:
     branches:
-      - main
+      - chore/**
+      - feature/**
+      - fix/**
 
     paths:
-      - '.github/workflows/main.yml'
+      - '.github/workflows/development.yml'
       - 'src/**'
       - 'husky-hooks.config.default.js'
       - 'package.json'
@@ -17,4 +19,4 @@ jobs:
   build:
     uses: ./.github/workflows/reusable-build.yml
     with:
-      node_versions: '[20]'
+      node_versions: '[20, 22]'
