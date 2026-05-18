@@ -3,113 +3,103 @@
 ![NPM](https://img.shields.io/npm/l/@jeliasson/husky-hooks)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@jeliasson/husky-hooks)
 ![npm](https://img.shields.io/npm/v/@jeliasson/husky-hooks)
-![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@jeliasson/husky-hooks)
 ![GitHub issues](https://img.shields.io/github/issues/jeliasson/husky-hooks)
 
-This npm package aims to increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle. It depends on [husky](https://www.npmjs.com/package/husky) for `pre-commit` and `pre-push` hooks, and a few other zero/low dependency packages.
-
-> :warning: **Note**: This package is in development and comes with breaking changes, so move with caution.
+A set of configurable git hooks for [husky](https://www.npmjs.com/package/husky) that help enforce consistency and best practices across your development workflow. Supports any git hook — `pre-commit`, `pre-push`, `commit-msg`, `post-merge`, and more.
 
 - [Setup](#setup)
 - [Hooks](#hooks)
-    - [`check-branch`](#check-branch)
-    - [`check-lock-files`](#check-lock-files)
-    - [`run-cmd`](#run-cmd)
-- [Other](#other)
+  - [`check-branch`](#check-branch)
+  - [`check-lock-files`](#check-lock-files)
+  - [`run-cmd`](#run-cmd)
+- [CLI](#cli)
 - [Development](#development)
-  - [Prerequisites](#prerequisites)
-  - [Todo](#todo)
 - [Contributing](#contributing)
 
 ## Setup
 
-First, make sure you have [husky](https://www.npmjs.com/package/husky) installed. See installation [here](https://typicode.github.io/husky/#/?id=manual) or refer to below quick setup.
+First, make sure you have [husky](https://www.npmjs.com/package/husky) installed. See the [husky documentation](https://typicode.github.io/husky/) or refer to the quick setup below.
 
 ```bash
-# Install husky dependency
-npm install --save--dev husky
-
 # Install husky
-npx husky install
+npm install --save-dev husky
+
+# Initialize husky
+npx husky init
 ```
 
-Once you have husky installed, let's proceed with setting up `@jeliasson/husky-hooks` and connect it with husky's `pre-commit` and `pre-push` hooks.
+Once husky is set up, install `@jeliasson/husky-hooks` and connect it to your git hooks.
 
 ```bash
-# Install dependency @jeliasson/husky-hooks
-npm install -save--dev @jeliasson/husky-hooks
+# Install @jeliasson/husky-hooks
+npm install --save-dev @jeliasson/husky-hooks
 
-# Add package pre-commit hook
-npx husky add .husky/pre-commit "npx @jeliasson/husky-hooks pre-commit"
+# Set up pre-commit hook
+echo "npx @jeliasson/husky-hooks pre-commit" > .husky/pre-commit
 
-# Add package pre-push hook
-npx husky add .husky/pre-push "npx @jeliasson/husky-hooks pre-push"
+# Set up pre-push hook
+echo "npx @jeliasson/husky-hooks pre-push" > .husky/pre-push
 ```
 
-Now to create a config file. `husky-hooks.config.js` will be placed in the root folder of the project.
+Create a config file. `husky-hooks.config.js` will be placed in the root folder of the project.
 
 ```bash
-# Create config
 npx @jeliasson/husky-hooks create-config
 ```
 
-Let's test it out and see if we get some magic ✨
+Test it out — make a new branch, create a test file, and commit:
 
 ```bash
-# Make a new branch, create a test file, git add and commit
 git checkout -b testing/jeliasson-husky-hooks
 touch test.tmp && git add test.tmp
 git commit -m "test(repo): keep calm and commit"
 ```
 
-This should yield the following output...
+This should yield the following output:
 
-```bash
-Running hook test-sleep... ✅
-Running hook check-branch... ✅
-Running hook check-lock-files... ✅
-Running hook run with argument 'echo Test'... ✅
+```
+Running hook test-sleep... OK
+Running hook check-branch... OK
+Running hook check-lock-files... OK
+Running hook run-cmd with argument 'echo Test'... OK
 ```
 
-...unless you have anything other than `package-lock.json` in your repo 😅
+Unless you have a denied lock file in your repo:
 
-```bash
-Running hook test-sleep... ✅
-Running hook check-branch... ✅
-Running hook check-lock-files... ❌
+```
+Running hook test-sleep... OK
+Running hook check-branch... OK
+Running hook check-lock-files... FAIL
 
-Invalid occurence of "yarn.lock" file. Remove it and only use "package-lock.json"
+Invalid occurrence of "yarn.lock" file. Please remove it and only use "package-lock.json"
 ```
 
 ## Hooks
 
-Hooks to run is defined in the configuration file `husky-hooks.config.js` that was created as part of the setup. Below is a table of available built-in hooks, followed by it's respective specific configuration. Future hooks may be created that require additional dev dependencies, not included in this package, but those will be marked.
+Hooks are defined in the configuration file `husky-hooks.config.js`. You can assign them to any git hook event (`pre-commit`, `pre-push`, `commit-msg`, `post-merge`, etc.).
 
-| Name                                    | Description                                                                                      |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [`check-branch`](#check-branch)         | Check which git branch we're currently on, and abort if it's a protected branch.                 |
-| [`check-lock-files`](#check-lock-files) | Check for package manager lock files, and abort if any are present lock file that we don't want. |
-| [`run-cmd`](#run-cmd)                   | Run a ad-hoc command, and abort if the commands fails.                                           |
+| Name                                    | Description                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| [`check-branch`](#check-branch)         | Abort if the current git branch is protected.                            |
+| [`check-lock-files`](#check-lock-files) | Abort if unwanted package manager lock files are present.                |
+| [`run-cmd`](#run-cmd)                   | Run an ad-hoc command and abort if it fails.                             |
 
 #### `check-branch`
 
-Check which git branch we're currently on, and abort if it's a protected branch. This can be useful to make sure that commits stay away from branches that only being used for Pull Requests or CI/CD.
+Check which git branch you're currently on, and abort if it's a protected branch. Useful for preventing accidental commits to branches reserved for pull requests or CI/CD.
 
 **Setup**
 
-Add `check-branch` hook to `pre-commit` and/or `pre-push`.
+Add `check-branch` to the desired hook events in your config:
 
 ```js
 {
   hooks: {
     'pre-commit': [
-      'check-branch', /* This line */
-      ...
+      'check-branch',
     ],
-
     'pre-push': [
-      'check-branch', /* This line */
-      ...
+      'check-branch',
     ],
   },
 }
@@ -130,23 +120,20 @@ Add `check-branch` hook to `pre-commit` and/or `pre-push`.
 
 #### `check-lock-files`
 
-Check for package manager lock files, and abort if any are present lock file that we don't want. This is useful to ensure that e.g. only `package-lock.json` is present in the repository.
+Check for unwanted package manager lock files and abort if any are found. Useful for ensuring that only one package manager is used across the project.
 
 **Setup**
 
-Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
+Add `check-lock-files` to the desired hook events in your config:
 
 ```js
 {
   hooks: {
     'pre-commit': [
-      'check-lock-files', /* This line */
-      ...
+      'check-lock-files',
     ],
-
     'pre-push': [
-      'check-lock-files', /* This line */
-      ...
+      'check-lock-files',
     ],
   },
 }
@@ -161,7 +148,7 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
       // Package manager lock file that should be present in the repository
       allowLockFile: 'package-lock.json',
 
-      // Package manager lock files that should yield a abort
+      // Package manager lock files that should cause an abort
       denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'],
     },
   }
@@ -170,71 +157,76 @@ Add `check-lock-files` hook to `pre-commit` and/or `pre-push`.
 
 #### `run-cmd`
 
-Run a ad-hoc command, for example `npm run lint`, and abort if the commands fails. This can be useful if you have other commands, for exmaple in your husky hooks, that you want to run as part of this package.
-
-> :warning: **Note**: Still figuring out the best approach to capture stdout/stderr and present them where appropriate. It works fine for now.
+Run an ad-hoc command (e.g. `npm run lint`) and abort if it fails. Useful for integrating additional checks into your hook pipeline.
 
 **Setup**
 
-Add `run-cmd` hooks to `pre-commit` and/or `pre-push`. It should be shaped as an array where the first argument is `run-cmd` and the second argument would be the command to run, e.g. `npm run lint`. In below example we have two ad-hoc commands for each hook.
+Add `run-cmd` as a tuple where the first element is `run-cmd` and the second is the command to execute:
 
 ```js
 {
   hooks: {
     'pre-commit': [
-      ['run-cmd', 'echo This is a pre-commit hook via run-cmd'],
       ['run-cmd', 'npm run lint'],
-      ...
+      ['run-cmd', 'npm run format -- --check'],
     ],
-
     'pre-push': [
-      ['run-cmd', 'echo This is a pre-push hook via run-cmd'],
-      ['run-cmd', 'npm run lint'],
-      ...
+      ['run-cmd', 'npm run test'],
     ],
   },
 }
 ```
 
-## Other
-
-**Print output**
-
-Sometimes you may want to print the actual output of a hook, and passing `--stdout` will print the stdout of all hooks.
+## CLI
 
 ```bash
+# Create a config file
+npx @jeliasson/husky-hooks create-config
+
+# Overwrite an existing config file
+npx @jeliasson/husky-hooks create-config --force
+
+# Run hooks for a git event
+npx @jeliasson/husky-hooks pre-commit
+
+# Run hooks and print stdout from each hook
 npx @jeliasson/husky-hooks pre-commit --stdout
+
+# Print version
+npx @jeliasson/husky-hooks --version
+
+# Print help
+npx @jeliasson/husky-hooks --help
 ```
 
 ## Development
 
 ### Prerequisites
 
-- NodeJS >= 22.16.0
+- Node.js >= 22.16.0
 - npm >= 10.8.2
 
-From the package directory, run
-
 ```bash
+# Link the package locally
 npm link
-```
 
-Start tsc watch
-
-```bash
+# Start TypeScript watch mode
 npm run dev
+
+# Run tests
+npm run test
 ```
 
-From the test project directory, run
+From a test project, link the local package:
 
 ```bash
 npm link @jeliasson/husky-hooks
 ```
 
-### Todo
+### Issues
 
 See [Issues](https://github.com/jeliasson/npm-husky-hooks/issues)
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md) ❤️
+See [CONTRIBUTING](CONTRIBUTING.md)

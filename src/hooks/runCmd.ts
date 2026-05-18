@@ -1,38 +1,38 @@
-import { execSync } from 'child_process'
+import { spawnSync } from 'node:child_process'
 
 import { CONFIG_FILE } from '../config'
-import { HookResponse } from '../types/hooks'
+import { HookResponse } from '../types'
 
-import { ThrowError, useHookResponse } from '../cli/response'
+import { ThrowError, createResponse } from '../response'
 
 export async function runCmd(command: string): Promise<HookResponse> {
-  const { stdout, errors } = useHookResponse()
+  const { stdout, errors } = createResponse()
 
   if (!command)
     ThrowError([
       `Command to run is empty.`,
-      `It's probabaly a typo in the hooks section of the ${CONFIG_FILE} config file.`,
+      `It's probably a typo in the hooks section of the ${CONFIG_FILE} config file.`,
       '',
       'Example:',
       "['run-cmd', 'npm run lint']",
     ])
 
-  try {
-    // Exec command
-    const exec = execSync(command, {
-      stdio: ['ignore'],
-    })
+  const result = spawnSync(command, {
+    shell: true,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  })
 
-    // Format output
-    // @todo: Refactor this to exec package
-    const output = exec.toString('utf8').replace(/[\n\r\s]+$/, '')
+  if (result.status !== 0) {
+    const errorOutput = result.stderr?.toString('utf8').replace(/[\n\r\s]+$/, '')
+      || result.stdout?.toString('utf8').replace(/[\n\r\s]+$/, '')
+      || `Command "${command}" exited with code ${result.status}`
+    errors.push(errorOutput)
+    return { stdout, errors }
+  }
 
-    // Push to stdout
-    stdout.push(output)
-  } catch (error) {
-    //const errorMessage = error.message.replace(/[\n\r\s]+$/, '')
-    //@ts-expect-error @todo We need to fix this
-    ThrowError([error])
+  if (result.stdout) {
+    const output = result.stdout.toString('utf8').replace(/[\n\r\s]+$/, '')
+    if (output) stdout.push(output)
   }
 
   return { stdout, errors }

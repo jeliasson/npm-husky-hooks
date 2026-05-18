@@ -9,10 +9,12 @@ on:
 
     paths:
       - '.github/workflows/development.yml'
+      - '.github/workflows/reusable-build.yml'
       - 'src/**'
       - 'husky-hooks.config.default.js'
       - 'package.json'
       - 'tsconfig.json'
+      - 'jestconfig.json'
       - 'package-lock.json'
 
 jobs:

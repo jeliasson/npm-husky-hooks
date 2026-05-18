@@ -2,7 +2,6 @@ import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import prettier from "eslint-config-prettier";
-import importHelpers from "eslint-plugin-import-helpers";
 
 export default [
   js.configs.recommended,
@@ -20,31 +19,39 @@ export default [
       parser: tsParser,
       ecmaVersion: "latest",
       sourceType: "module",
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        require: "readonly",
+        __dirname: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        Buffer: "readonly",
+        setTimeout: "readonly",
+        fetch: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": ts,
-      "import-helpers": importHelpers,
     },
     rules: {
       ...ts.configs.recommended.rules,
       ...ts.configs.strict.rules,
-      "import-helpers/order-imports": [
-        "warn",
-        {
-          newlinesBetween: "always",
-          groups: [
-            "module",
-            "absolute",
-            ["/^..*/config/", "/^..*/types/"],
-            "/^..*/cli/",
-            ["/^..*/commands/", "/^..*/hooks/"],
-            "/^@/",
-            ["parent", "sibling", "index"],
-          ],
-          alphabetize: { order: "asc", ignoreCase: true },
-        },
-      ],
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
-  prettier, // Use Prettier formatting
+  {
+    files: ["src/__tests__/**/*.ts"],
+    languageOptions: {
+      globals: {
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        jest: "readonly",
+      },
+    },
+  },
+  prettier,
 ];

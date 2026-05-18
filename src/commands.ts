@@ -1,33 +1,40 @@
-import { PACKAGE_NAME } from './config'
-import { Commands } from './types/commands'
+import { CONFIG_FILE, PACKAGE_NAME, createConfig } from './config'
+import { Commands } from './types'
 
-import { createConfigCommand } from './commands/createConfig'
+import { CLIParser } from './cli'
+import { ThrowError, ThrowSuccess, createResponse } from './response'
 
-// Registered commands
-export const commands = <Commands>{
+export async function createConfigCommand(): Promise<{ stdout: string[]; errors: string[] }> {
+  const { stdout, errors } = createResponse()
+
+  const cli = await CLIParser()
+  const { force } = cli.opts
+
+  const config = await createConfig(force === true || false)
+
+  if (config) ThrowSuccess([`Config file '${CONFIG_FILE}' was created.`])
+
+  return { stdout, errors }
+}
+
+export const commands: Commands = {
   'create-config': createConfigCommand,
 }
 
-/**
- * Run command
- *
- * @param   {string} name               Name of command to run
- * @returns {Promise<void>}
- */
-export async function runCommand(name: string): Promise<void> {
-  // @todo: Refactor into runCommand maybe? Probabaly.
+export async function runCommand(name: string): Promise<boolean> {
   if (!name) {
-    console.log(`\n❌ Missing command, e.g. create-config.\n`)
-    console.log(`> npx ${PACKAGE_NAME} create-config`)
-
-    process.exit(1)
+    ThrowError([
+      `Missing command, e.g. create-config.`,
+      ``,
+      `> npx ${PACKAGE_NAME} create-config`,
+    ])
   }
 
   const command = commands[name]
   if (typeof command === 'function') {
     await command()
-
-    // Exit out from here
-    process.exit(0)
+    return true
   }
+
+  return false
 }

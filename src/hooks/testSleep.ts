@@ -1,18 +1,14 @@
-import { getConfigSettingByName } from '../config'
-import { HookResponse } from '../types/hooks'
+import { getSetting } from '../config'
+import { HookResponse } from '../types'
 
-import { useHookResponse } from '../cli/response'
+import { createResponse } from '../response'
 
 export async function testSleep(): Promise<HookResponse> {
-  const { stdout, errors } = useHookResponse()
+  const { stdout, errors } = createResponse()
 
-  // Get delay setting
-  const delay = await getConfigSettingByName('test-sleep', 'delay')
+  const delay = await getSetting('test-sleep', 'delay')
 
-  // Sleep
-  await new Promise((resolve) =>
-    setTimeout(resolve, Number.parseInt(delay.value as string, 10))
-  )
+  await new Promise((resolve) => setTimeout(resolve, delay))
 
   return { stdout, errors }
 }
