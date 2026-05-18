@@ -14,14 +14,13 @@ env:
   RUNTIME_ENV: 'main'
 
 jobs:
-  build:
-    name: Build
+  test:
+    name: Unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     strategy:
       matrix:
         version: ${{ fromJSON(inputs.node_versions) }}
-        os: [ubuntu-latest]
 
     steps:
       - name: Checkout source code
@@ -32,46 +31,166 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
 
-      - name: Install depencencies
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests
+        run: npm run test
+
+  e2e:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        version: ${{ fromJSON(inputs.node_versions) }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.version }}
+
+      - name: Install dependencies
         run: npm install
 
       - name: Build
         run: npm run build
 
-      - name: Fix - Link package
-        run: |
-          npm link
+      - name: Link package
+        run: npm link
 
-      # @todo: Why would this be needed?
-      - name: Fix - Executable permissions
-        run: |
-          chmod +x ./lib/bin.js
+      - name: Set executable permissions
+        run: chmod +x ./lib/bin.js
 
-      - name: Fix - Delete current config
-        run: |
-          rm husky-hooks.config.js
+      # --- CLI flags ---
 
-      - name: Test - Command 'create-config'
+      - name: "E2E: --version prints version"
         run: |
-          npx @jeliasson/husky-hooks create-config
+          output=$(npx @jeliasson/husky-hooks --version)
+          echo "Version output: $output"
+          echo "$output" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+'
 
-      - name: Test - Command 'create-config --force'
+      - name: "E2E: --help prints usage info"
         run: |
-          npx @jeliasson/husky-hooks create-config --force
+          output=$(npx @jeliasson/husky-hooks --help)
+          echo "$output"
+          echo "$output" | grep -q "husky-hooks"
 
-      - name: Fix - Update protectedBranches to be []
-        run: |
-          cp husky-hooks.config.js husky-hooks.config.js.bak && \
-          cat husky-hooks.config.js.bak | sed 's/.*protectedBranches.*/\      protectedBranches\:\ [],/' > husky-hooks.config.js
+      # --- Error cases ---
 
-      - name: Debug - Display config
+      - name: "E2E: no arguments exits with error"
         run: |
-          cat husky-hooks.config.js
+          if npx @jeliasson/husky-hooks 2>&1; then
+            echo "Expected non-zero exit code"
+            exit 1
+          fi
 
-      - name: Test - 'pre-commit' hooks
+      - name: "E2E: unknown command exits with error"
         run: |
-          npx @jeliasson/husky-hooks pre-commit
+          if npx @jeliasson/husky-hooks nonexistent-command 2>&1; then
+            echo "Expected non-zero exit code"
+            exit 1
+          fi
 
-      - name: Test - 'pre-push' hooks
+      # --- Config management ---
+
+      - name: Ensure no existing config
+        run: rm -f husky-hooks.config.js
+
+      - name: "E2E: create-config"
+        run: npx @jeliasson/husky-hooks create-config
+
+      - name: "E2E: create-config without --force fails"
         run: |
-          npx @jeliasson/husky-hooks pre-push
+          if npx @jeliasson/husky-hooks create-config 2>&1; then
+            echo "Expected non-zero exit code when config exists"
+            exit 1
+          fi
+
+      - name: "E2E: create-config --force"
+        run: npx @jeliasson/husky-hooks create-config --force
+
+      # --- Protected branch detection ---
+
+      - name: "E2E: check-branch fails on protected branch"
+        run: |
+          branch=$(git branch --show-current)
+          echo "Current branch: $branch"
+          cat > husky-hooks.config.js << CONF
+          const config = {
+            hooks: { 'pre-commit': ['check-branch'] },
+            settings: {
+              'check-branch': { protectedBranches: ['$branch'] },
+              'check-lock-files': { allowLockFile: 'package-lock.json', denyLockFiles: [] },
+              'test-sleep': { delay: 0 },
+            },
+          }
+          module.exports = config
+          CONF
+          if npx @jeliasson/husky-hooks pre-commit 2>&1; then
+            echo "Expected check-branch to fail on current branch"
+            exit 1
+          fi
+
+      # --- Hook execution ---
+
+      - name: Update config for hook execution tests
+        run: |
+          cat > husky-hooks.config.js << 'CONF'
+          const config = {
+            hooks: {
+              'pre-commit': [
+                'check-lock-files',
+                ['run-cmd', 'echo hello-from-hook'],
+              ],
+              'pre-push': [
+                'check-lock-files',
+              ],
+            },
+            settings: {
+              'check-branch': { protectedBranches: [] },
+              'check-lock-files': { allowLockFile: 'package-lock.json', denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'] },
+              'test-sleep': { delay: 0 },
+            },
+          }
+          module.exports = config
+          CONF
+
+      - name: "E2E: pre-commit hooks"
+        run: npx @jeliasson/husky-hooks pre-commit
+
+      - name: "E2E: pre-push hooks"
+        run: npx @jeliasson/husky-hooks pre-push
+
+      - name: "E2E: --stdout shows hook output"
+        run: |
+          output=$(npx @jeliasson/husky-hooks pre-commit --stdout 2>&1)
+          echo "$output"
+          echo "$output" | grep -q "hello-from-hook"
+
+  audit:
+    name: Security audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        version: ${{ fromJSON(inputs.node_versions) }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run npm audit
+        run: npm audit --omit=dev

@@ -1,49 +1,22 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
-import { getConfigSettingByName } from '../config'
-import { HookResponse } from '../types/hooks'
+import { getSetting } from '../config'
+import { HookResponse } from '../types'
 
-import { useHookResponse } from '../cli/response'
+import { createResponse } from '../response'
 
 export async function checkLockFiles(): Promise<HookResponse> {
-  const { stdout, errors } = useHookResponse()
+  const { stdout, errors } = createResponse()
 
-  // Allowed lock file
-  const allowLockFile = await getConfigSettingByName(
-    'check-lock-files',
-    'allowLockFile'
-  )
+  const allowLockFile = await getSetting('check-lock-files', 'allowLockFile')
+  const denyLockFiles = await getSetting('check-lock-files', 'denyLockFiles')
 
-  // Deny lock files
-  const denyLockFiles = await getConfigSettingByName(
-    'check-lock-files',
-    'denyLockFiles'
-  )
-
-  // Check files
-  for (const file of <string[]>denyLockFiles.value) {
+  for (const file of denyLockFiles) {
     if (fs.existsSync(file)) {
       errors.push(
-        `Invalid occurence of "${file}" file. Please remove it and only use "${<
-          string
-        >allowLockFile.value}"`
+        `Invalid occurrence of "${file}" file. Please remove it and only use "${allowLockFile}"`
       )
     }
-  }
-
-  try {
-    const content = fs.readFileSync(<string>allowLockFile.value, 'utf-8')
-    if (content.match(/localhost:487/)) {
-      errors.push(
-        `The "${<string>(
-          allowLockFile.value
-        )}" has reference to local yarn repository ("localhost:4873"). Please use "registry.yarnpkg.com" in "${allowLockFile}"`
-      )
-    }
-  } catch {
-    errors.push(
-      `The "${<string>allowLockFile.value}" does not exist or cannot be read`
-    )
   }
 
   return { stdout, errors }

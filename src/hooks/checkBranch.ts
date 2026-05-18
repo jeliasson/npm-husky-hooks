@@ -1,32 +1,22 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'node:child_process'
 
-import { getConfigSettingByName } from '../config'
-import { HookResponse } from '../types/hooks'
+import { getSetting } from '../config'
+import { HookResponse } from '../types'
 
-import { useHookResponse } from '../cli/response'
+import { createResponse } from '../response'
 
 export async function checkBranch(): Promise<HookResponse> {
-  const { stdout, errors } = useHookResponse()
+  const { stdout, errors } = createResponse()
 
-  // Protected branch setting
-  const protectedBranches = await getConfigSettingByName(
-    'check-branch',
-    'protectedBranches'
-  )
+  const protectedBranches = await getSetting('check-branch', 'protectedBranches')
 
-  // Exec command
-  const exec = execSync(`git branch --show-current`, {
+  const output = execFileSync('git', ['branch', '--show-current'], {
     stdio: ['pipe', 'pipe', 'ignore'],
   })
 
-  // Format output
-  // @todo: Refactor this to exec package
-  const branch = exec.toString('utf8').replace(/[\n\r\s]+$/, '')
+  const branch = output.toString('utf8').replace(/[\n\r\s]+$/, '')
 
-  if (
-    Array.isArray(protectedBranches.value) &&
-    protectedBranches.value.includes(branch)
-  ) {
+  if (protectedBranches.includes(branch)) {
     errors.push(`Branch "${branch}" is protected.`)
   }
 

@@ -1,94 +1,64 @@
-import { CONFIG_FILE, getConfig, PACKAGE_NAME, validateConfig } from './config'
-import { Config } from './types/index'
+import { getConfig, PACKAGE_NAME, validateConfig } from './config'
 
 import { CLIParser } from './cli'
-import { ThrowError } from './cli/response'
+import { CLIError, ThrowError } from './response'
 
 import { runCommand } from './commands'
 import { runHook } from './hooks'
 
+function parseHook(hook: string | [string, string]): { name: string; arg?: string } {
+  if (typeof hook === 'string') return { name: hook }
+  return { name: hook[0], arg: hook[1] }
+}
+
 export async function init(): Promise<void> {
   const { args, opts } = await CLIParser()
 
-  // Command
   const [command] = args
-  await runCommand(command)
+  const handled = await runCommand(command)
+  if (handled) return
 
-  // Config
   const config = await getConfig()
   await validateConfig(config)
 
-  // Get all hooks related to the command
-  const allHooks = config.hooks[command as keyof Config['hooks']]
+  const allHooks = config.hooks[command]
 
-  // Hooks
   if (!allHooks) {
-    console.log(`\n❌ Unknown command ${command}.\n`)
-    Object.keys(config.hooks).map(function (command) {
-      console.log(`> npx ${PACKAGE_NAME} ${command}`)
-    })
-
-    process.exit(1)
+    ThrowError([
+      `Unknown command ${command}.`,
+      '',
+      ...Object.keys(config.hooks).map((cmd) => `> npx ${PACKAGE_NAME} ${cmd}`),
+    ])
   }
 
-  // Loop thru all hooks
   for (const hook of allHooks) {
-    // Hooks to run and with possible options
-    // @todo: Make this prettier. Kill it with fire.
-    let run = null
-    let arg = undefined
+    const { name, arg } = parseHook(hook)
 
-    switch (typeof hook) {
-      case 'string':
-        run = hook
-        process.stdout.write(`Running hook ${run}... `)
-        break
-
-      case 'object':
-        ;[run, arg] = hook
-        process.stdout.write(`Running hook ${run} with argument '${arg}'... `)
-        break
-
-      default: // Just adds run below to make TS happy
-        run = '__nothing__'
-        ThrowError([
-          `Unknown type '${typeof hook}' for hook '${hook}'.`,
-          `It's probabaly a typo in the hooks section of the ${CONFIG_FILE} config file.`,
-        ])
-        break
-    }
+    const label = arg
+      ? `Running hook ${name} with argument '${arg}'... `
+      : `Running hook ${name}... `
+    process.stdout.write(label)
 
     try {
-      // Run the hook
-      const response = await runHook(run, arg)
+      const response = await runHook(name, arg)
 
-      // Print a response icon
-      console.log(response?.errors && response.errors.length > 0 ? '❌' : '✅')
-
-      if (response?.errors && response.errors.length > 0) {
-        // Print errors
-
+      if (response.errors.length > 0) {
+        console.log('FAIL')
         console.log()
-        response.errors.map((error: string) => console.log(`${error}`))
+        response.errors.forEach((error: string) => console.log(error))
+        throw new CLIError([], 1)
+      }
 
-        // Exit
-        process.exit(1)
-      } else {
-        const stdout = response?.stdout ? response.stdout : null
-        if (stdout && opts.stdout) {
-          // Print stdout if --stdout was passed
-          // @todo: Fix this ugliness
-          if (stdout.length > 0) console.log()
-          stdout.map((line: string) => console.log(`${line}`))
-          if (stdout.length > 0) console.log()
-        }
+      console.log('OK')
+
+      if (opts.stdout && response.stdout.length > 0) {
+        console.log()
+        response.stdout.forEach((line: string) => console.log(line))
+        console.log()
       }
     } catch (error) {
-      console.log(`❌\n\n`, error)
-
-      process.exit(1)
+      if (error instanceof CLIError) throw error
+      throw new CLIError([String(error)], 1)
     }
   }
 }
-
-init()
