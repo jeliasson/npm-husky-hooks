@@ -19,7 +19,7 @@ describe('commands', () => {
       }
     })
 
-    it('should return false when command name is not registered', async () => {
+    it('should return false when command is not registered', async () => {
       const result = await runCommand('unknown-cmd')
       expect(result).toBe(false)
     })

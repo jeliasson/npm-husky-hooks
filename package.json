@@ -1,6 +1,6 @@
 {
   "name": "@jeliasson/husky-hooks",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "description": "Increase the developer experience and consistency by providing a set of hooks that can be opted-in the development lifecycle.",
   "author": "jeliasson",
@@ -42,7 +42,7 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib/**/*",
-    "husky-hooks.config.default.js"
+    "husky-hooks.config.default.cjs"
   ],
   "bin": {
     "husky-hooks": "lib/bin.js"

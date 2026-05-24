@@ -9,7 +9,7 @@ on:
       - '.github/workflows/main.yml'
       - '.github/workflows/reusable-build.yml'
       - 'src/**'
-      - 'husky-hooks.config.default.js'
+      - 'husky-hooks.config.default.cjs'
       - 'package.json'
       - 'tsconfig.json'
       - 'jestconfig.json'

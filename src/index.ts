@@ -15,8 +15,15 @@ export async function init(): Promise<void> {
   const { args, opts } = await CLIParser()
 
   const [command] = args
-  const handled = await runCommand(command)
-  if (handled) return
+  const result = await runCommand(command)
+  if (result) {
+    result.stdout.forEach((line: string) => console.log(line))
+    if (result.errors.length > 0) {
+      result.errors.forEach((error: string) => console.error(error))
+      throw new CLIError([], 1)
+    }
+    return
+  }
 
   const config = await getConfig()
   await validateConfig(config)

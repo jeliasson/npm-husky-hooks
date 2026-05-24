@@ -14,10 +14,6 @@ export function ThrowError(messages: string[]): never {
   throw new CLIError(messages, 1)
 }
 
-export function ThrowSuccess(messages: string[]): never {
-  throw new CLIError(messages, 0)
-}
-
 export function ThrowException(messages: string[]): never {
   const formatted = messages.join('\n')
   throw new Error(`\n\nException\n\n${formatted}\n\nStack trace\n`)

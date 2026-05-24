@@ -30,6 +30,10 @@ export type Config = z.infer<typeof ConfigSchema>
 
 export type SettingsName = keyof Config['settings']
 
+export type RequiredSettings = {
+  [K in SettingsName]: NonNullable<Config['settings'][K]>
+}
+
 const HookNames = [
   'check-branch',
   'check-lock-files',
@@ -50,13 +54,13 @@ export const ConfigSchema = z.object({
   settings: z.object({
     'check-branch': z.object({
       protectedBranches: z.array(z.string()),
-    }),
+    }).optional(),
     'check-lock-files': z.object({
       allowLockFile: z.string(),
       denyLockFiles: z.array(z.string()),
-    }),
+    }).optional(),
     'test-sleep': z.object({
       delay: z.number().min(0),
-    }),
+    }).optional(),
   }),
 })

@@ -45,12 +45,22 @@ describe('ConfigSchema validation', () => {
     expect(result.success).toBe(true)
   })
 
-  it('should reject config with missing settings', () => {
+  it('should accept config with empty settings', () => {
     const result = ConfigSchema.safeParse({
       ...validConfig,
       settings: {},
     })
-    expect(result.success).toBe(false)
+    expect(result.success).toBe(true)
+  })
+
+  it('should accept config with only some settings', () => {
+    const result = ConfigSchema.safeParse({
+      ...validConfig,
+      settings: {
+        'check-branch': { protectedBranches: ['main'] },
+      },
+    })
+    expect(result.success).toBe(true)
   })
 
   it('should reject invalid hook names in hook arrays', () => {
