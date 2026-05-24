@@ -99,7 +99,7 @@ jobs:
       # --- Config management ---
 
       - name: Ensure no existing config
-        run: rm -f husky-hooks.config.js
+        run: rm -f husky-hooks.config.cjs
 
       - name: "E2E: create-config"
         run: npx @jeliasson/husky-hooks create-config
@@ -120,13 +120,11 @@ jobs:
         run: |
           branch=$(git branch --show-current)
           echo "Current branch: $branch"
-          cat > husky-hooks.config.js << CONF
+          cat > husky-hooks.config.cjs << CONF
           const config = {
             hooks: { 'pre-commit': ['check-branch'] },
             settings: {
               'check-branch': { protectedBranches: ['$branch'] },
-              'check-lock-files': { allowLockFile: 'package-lock.json', denyLockFiles: [] },
-              'test-sleep': { delay: 0 },
             },
           }
           module.exports = config
@@ -140,7 +138,7 @@ jobs:
 
       - name: Update config for hook execution tests
         run: |
-          cat > husky-hooks.config.js << 'CONF'
+          cat > husky-hooks.config.cjs << 'CONF'
           const config = {
             hooks: {
               'pre-commit': [
@@ -152,9 +150,7 @@ jobs:
               ],
             },
             settings: {
-              'check-branch': { protectedBranches: [] },
               'check-lock-files': { allowLockFile: 'package-lock.json', denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'] },
-              'test-sleep': { delay: 0 },
             },
           }
           module.exports = config

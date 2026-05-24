@@ -1,27 +1,26 @@
 import { CONFIG_FILE, PACKAGE_NAME, createConfig } from './config'
-import { Commands } from './types'
+import { CommandResponse, Commands } from './types'
 
 import { CLIParser } from './cli'
-import { ThrowError, ThrowSuccess, createResponse } from './response'
+import { ThrowError } from './response'
 
-export async function createConfigCommand(): Promise<{ stdout: string[]; errors: string[] }> {
-  const { stdout, errors } = createResponse()
-
+export async function createConfigCommand(): Promise<CommandResponse> {
   const cli = await CLIParser()
   const { force } = cli.opts
 
-  const config = await createConfig(force === true || false)
+  const created = await createConfig(force === true || false)
 
-  if (config) ThrowSuccess([`Config file '${CONFIG_FILE}' was created.`])
-
-  return { stdout, errors }
+  return {
+    stdout: created ? [`Config file '${CONFIG_FILE}' was created.`] : [],
+    errors: [],
+  }
 }
 
 export const commands: Commands = {
   'create-config': createConfigCommand,
 }
 
-export async function runCommand(name: string): Promise<boolean> {
+export async function runCommand(name: string): Promise<CommandResponse | false> {
   if (!name) {
     ThrowError([
       `Missing command, e.g. create-config.`,
@@ -32,8 +31,7 @@ export async function runCommand(name: string): Promise<boolean> {
 
   const command = commands[name]
   if (typeof command === 'function') {
-    await command()
-    return true
+    return await command()
   }
 
   return false

@@ -1,15 +1,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { Config, ConfigSchema, SettingsName } from './types'
+import { Config, ConfigSchema, RequiredSettings, SettingsName } from './types'
 
 import { CLIError, ThrowError, ThrowException } from './response'
 
 const fsp = fs.promises
 
 export const PACKAGE_NAME = '@jeliasson/husky-hooks'
-export const CONFIG_FILE = 'husky-hooks.config.js'
-export const ORIGINAL_CONFIG_FILE = 'husky-hooks.config.default.js'
+export const CONFIG_FILE = 'husky-hooks.config.cjs'
+export const ORIGINAL_CONFIG_FILE = 'husky-hooks.config.default.cjs'
 
 function getConfigPath(): string {
   return path.join(process.cwd(), CONFIG_FILE)
@@ -39,7 +39,7 @@ export async function getConfig(): Promise<Config> {
   return require(configPath)
 }
 
-export async function createConfig(force = false): Promise<Config | false> {
+export async function createConfig(force = false): Promise<boolean> {
   const originalConfig = getDefaultConfigPath()
   const configPath = getConfigPath()
 
@@ -58,12 +58,13 @@ export async function createConfig(force = false): Promise<Config | false> {
   try {
     await fsp.copyFile(originalConfig, configPath)
 
-    return require(configPath)
-  } catch {
-    ThrowException([`An error occurred while creating ${CONFIG_FILE}`])
+    return true
+  } catch (error) {
+    ThrowException([
+      `An error occurred while creating ${CONFIG_FILE}`,
+      String(error),
+    ])
   }
-
-  return false
 }
 
 export async function validateConfig(config: Config): Promise<Config> {
@@ -105,15 +106,21 @@ export async function validateConfig(config: Config): Promise<Config> {
 
 export async function getSettings<T extends SettingsName>(
   name: T
-): Promise<Config['settings'][T]> {
+): Promise<RequiredSettings[T]> {
   const config = await getConfig()
-  return config.settings[name]
+  const settings = config.settings[name]
+  if (!settings)
+    ThrowError([
+      `Missing settings for "${name}" in ${CONFIG_FILE}.`,
+      `Add a "${name}" section under settings to use this hook.`,
+    ])
+  return settings as RequiredSettings[T]
 }
 
 export async function getSetting<
   T extends SettingsName,
-  K extends keyof Config['settings'][T],
->(name: T, key: K): Promise<Config['settings'][T][K]> {
-  const config = await getConfig()
-  return config.settings[name][key]
+  K extends keyof RequiredSettings[T],
+>(name: T, key: K): Promise<RequiredSettings[T][K]> {
+  const settings = await getSettings(name)
+  return settings[key]
 }

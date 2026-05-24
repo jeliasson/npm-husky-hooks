@@ -10,8 +10,6 @@ describe('validateConfig', () => {
     },
     settings: {
       'check-branch': { protectedBranches: ['main'] },
-      'check-lock-files': { allowLockFile: 'package-lock.json', denyLockFiles: [] },
-      'test-sleep': { delay: 100 },
     },
   }
 

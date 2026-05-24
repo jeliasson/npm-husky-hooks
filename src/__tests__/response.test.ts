@@ -1,4 +1,4 @@
-import { CLIError, ThrowSuccess, ThrowError, ThrowException, createResponse } from '../response'
+import { CLIError, ThrowError, ThrowException, createResponse } from '../response'
 
 describe('response', () => {
   describe('CLIError', () => {
@@ -13,29 +13,6 @@ describe('response', () => {
     it('should default exit code to 1', () => {
       const error = new CLIError(['oops'])
       expect(error.exitCode).toBe(1)
-    })
-  })
-
-  describe('ThrowSuccess', () => {
-    it('should throw CLIError with exit code 0', () => {
-      try {
-        ThrowSuccess(['Done'])
-        fail('should have thrown')
-      } catch (error) {
-        expect(error).toBeInstanceOf(CLIError)
-        expect((error as CLIError).exitCode).toBe(0)
-        expect((error as CLIError).messages).toEqual(['Done'])
-      }
-    })
-
-    it('should join multiple messages', () => {
-      try {
-        ThrowSuccess(['Line 1', 'Line 2'])
-        fail('should have thrown')
-      } catch (error) {
-        expect((error as CLIError).message).toContain('Line 1')
-        expect((error as CLIError).message).toContain('Line 2')
-      }
     })
   })
 

@@ -3,14 +3,12 @@
 const config = {
   hooks: {
     'pre-commit': [
-      'test-sleep', // This is a dummy hook for demo purposes
       'check-branch',
       'check-lock-files',
       ['run-cmd', 'echo Test'],
     ],
 
     'pre-push': [
-      'test-sleep', // This is a dummy hook for demo purposes
       'check-branch',
       'check-lock-files',
       ['run-cmd', 'echo Test'],
@@ -43,17 +41,6 @@ const config = {
 
       // Package manager lock files that should yield a abort
       denyLockFiles: ['yarn.lock', 'pnpm-lock.yaml'],
-    },
-
-    /**
-     * test-sleep
-     *
-     * This is a dummy hook for demo purposes. It sleeps for 1000 seconds
-     * before continuing to next hook.
-     */
-    'test-sleep': {
-      // How long should the hook sleep for
-      delay: 1000,
     },
   },
 }

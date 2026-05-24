@@ -41,7 +41,7 @@ echo "npx @jeliasson/husky-hooks pre-commit" > .husky/pre-commit
 echo "npx @jeliasson/husky-hooks pre-push" > .husky/pre-push
 ```
 
-Create a config file. `husky-hooks.config.js` will be placed in the root folder of the project.
+Create a config file. `husky-hooks.config.cjs` will be placed in the root folder of the project.
 
 ```bash
 npx @jeliasson/husky-hooks create-config
@@ -76,13 +76,13 @@ Invalid occurrence of "yarn.lock" file. Please remove it and only use "package-l
 
 ## Hooks
 
-Hooks are defined in the configuration file `husky-hooks.config.js`. You can assign them to any git hook event (`pre-commit`, `pre-push`, `commit-msg`, `post-merge`, etc.).
+Hooks are defined in the configuration file `husky-hooks.config.cjs`. You can assign them to any git hook event (`pre-commit`, `pre-push`, `commit-msg`, `post-merge`, etc.).
 
-| Name                                    | Description                                                              |
-| --------------------------------------- | ------------------------------------------------------------------------ |
-| [`check-branch`](#check-branch)         | Abort if the current git branch is protected.                            |
-| [`check-lock-files`](#check-lock-files) | Abort if unwanted package manager lock files are present.                |
-| [`run-cmd`](#run-cmd)                   | Run an ad-hoc command and abort if it fails.                             |
+| Name                                    | Description                                               |
+| --------------------------------------- | --------------------------------------------------------- |
+| [`check-branch`](#check-branch)         | Abort if the current git branch is protected.             |
+| [`check-lock-files`](#check-lock-files) | Abort if unwanted package manager lock files are present. |
+| [`run-cmd`](#run-cmd)                   | Run an ad-hoc command and abort if it fails.              |
 
 #### `check-branch`
 

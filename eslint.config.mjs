@@ -7,8 +7,8 @@ export default [
   js.configs.recommended,
   {
     ignores: [
-      "husky-hooks.config.js",
-      "husky-hooks.config.default.js",
+      "husky-hooks.config.cjs",
+      "husky-hooks.config.default.cjs",
       "prettier.config.js",
       "lib/*"
     ],
