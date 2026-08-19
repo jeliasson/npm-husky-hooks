@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.version }}
 
@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.version }}
 
@@ -181,7 +181,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.version }}
 
